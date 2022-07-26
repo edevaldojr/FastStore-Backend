@@ -8,5 +8,6 @@ public class Image {
     private int id;
     private String url;
     private Color color;
+    private Product product;
     
 }

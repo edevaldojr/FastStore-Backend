@@ -16,4 +16,5 @@ public class Employee extends User {
     private boolean ativo;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
+    
 }

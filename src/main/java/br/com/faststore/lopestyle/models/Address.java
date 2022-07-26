@@ -9,4 +9,5 @@ public class Address {
     private String number;
     private String complemento;
     private ViaCep addressFull;
+    
 }

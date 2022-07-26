@@ -1,5 +1,7 @@
 package br.com.faststore.lopestyle.models;
 
+import java.time.LocalDateTime;
+
 import lombok.Data;
 
 @Data

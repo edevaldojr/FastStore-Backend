@@ -2,15 +2,16 @@ package br.com.faststore.lopestyle.models;
 
 import java.time.LocalDateTime;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class Employee {
+@EqualsAndHashCode(callSuper=true)
+@AllArgsConstructor
+public class Employee extends User {
     
     private int id;
-    private User user;
-    private String firstName;
-    private String lastName;
     private boolean admin;
     private boolean ativo;
     private LocalDateTime createdAt;

@@ -3,16 +3,17 @@ package br.com.faststore.lopestyle.models;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
-public class Consumer {
+@EqualsAndHashCode(callSuper=true)
+@AllArgsConstructor
+public class Consumer extends User {
     
     private int id;
-    private User user;
     private String cpf;
-    private String firstName;
-    private String lastName;
     private String phoneNumber;
     private Date birthDate;
     private String sexo;

@@ -32,15 +32,15 @@ public class ProductService {
 
     public Product createProduct(Product product) {
         LocalDate dateNow = LocalDate.now();
-        product.setCreatedAt(dateNow);
-        product.setUpdatedAt(dateNow);
+       // product.setCreatedAt(dateNow);
+       // product.setUpdatedAt(dateNow);
         return repository.save(product);
     }
 
     public Product updateProduct(int productId, Product product) {
         Product prod = repository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
-        LocalDate dateNow = LocalDate.now();
+        //LocalDate dateNow = LocalDate.now();
         prod = Product.builder()
                         .sku(product.getSku())
                         .name(product.getName())
@@ -52,7 +52,7 @@ public class ProductService {
                         .images(product.getImages())
                         .description(product.getDescription())
                         .createdAt(product.getCreatedAt())
-                        .updatedAt(dateNow)
+                        //.updatedAt(dateNow)
                         .build();
                         
         return repository.save(prod);

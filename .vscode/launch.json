@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-LopestyleApplication<lopestyle>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "br.com.faststore.lopestyle.LopestyleApplication",
+            "projectName": "lopestyle",
+            "args": ""
+        }
+    ]
+}

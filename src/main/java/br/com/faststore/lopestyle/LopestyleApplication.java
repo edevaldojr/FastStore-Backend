@@ -9,5 +9,6 @@ public class LopestyleApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(LopestyleApplication.class, args);
 	}
+	
 
 }

@@ -1,42 +1,55 @@
 package br.com.faststore.lopestyle.models;
 
-import java.time.LocalDateTime;
+import java.util.Calendar;
 import java.util.List;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
+
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
+
+import br.com.faststore.lopestyle.models.utils.OrderStatus;
 import lombok.Data;
-import lombok.Getter;
 
 @Data
+@Entity
 public class Order {
-
-    public enum OrderStatus {
-
-        PREPARING("Preparando Pedido"),
-        POSTED("Pedido Enviado"),
-        FINISHED("Pedido Finalizado");
-				
-		@Getter
-		private String translateStatus;
-
-		OrderStatus(String translateStatus) {
-			this.translateStatus = translateStatus;
-		}
-
-		public static String getTranslateStatus(String name) {
-			for (OrderStatus status : OrderStatus.values()) {
-				if (status.toString().equals(name)) {
-					return status.getTranslateStatus();
-				}
-			}
-			return "Erro ao traduzir OrderStatus";
-		}
-    }
-    
+   
+    @Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     private OrderStatus status;
+
+	@ManyToOne
+	@JoinColumn(name = "consumerId")
     private Consumer consumer;
+
+	@ManyToOne
+	@JoinColumn(name = "addressId")
+	private Address address;
+
+	@OneToOne
+	private Payment payment;
+
+	@OneToMany
+	@JoinColumn(name = "orderProductId")
     private List<OrderProduct> orderProduct;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+	
+	@CreationTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar createdAt;
+    @UpdateTimestamp
+    @Temporal(TemporalType.TIMESTAMP)
+    private Calendar updatedAt;
 
 }

@@ -31,18 +31,18 @@ public class Order {
     private OrderStatus status;
 
 	@ManyToOne
-	@JoinColumn(name = "consumerId")
+	@JoinColumn(name = "consumer_id")
     private Consumer consumer;
 
 	@ManyToOne
-	@JoinColumn(name = "addressId")
+	@JoinColumn(name = "address_id")
 	private Address address;
 
 	@OneToOne
 	private Payment payment;
 
 	@OneToMany
-	@JoinColumn(name = "orderProductId")
+	@JoinColumn(name = "orderProduct_id")
     private List<OrderProduct> orderProduct;
 	
 	@CreationTimestamp

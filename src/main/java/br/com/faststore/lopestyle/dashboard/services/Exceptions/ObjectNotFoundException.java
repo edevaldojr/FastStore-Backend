@@ -1,4 +1,4 @@
-package br.com.faststore.lopestyle.services.Exceptions;
+package br.com.faststore.lopestyle.dashboard.services.Exceptions;
 
 public class ObjectNotFoundException extends RuntimeException {
     

@@ -22,7 +22,7 @@ public class OrderProduct {
     private double unityValue;
     private double totalValue;
     @OneToOne
-    @JoinColumn(name = "productId")
+    @JoinColumn(name = "product_id")
     private Product product;
     @ManyToOne
     private Order order;

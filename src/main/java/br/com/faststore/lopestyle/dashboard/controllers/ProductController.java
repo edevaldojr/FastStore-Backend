@@ -1,8 +1,9 @@
-package br.com.faststore.lopestyle.controllers;
+package br.com.faststore.lopestyle.dashboard.controllers;
 
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,11 +14,12 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.faststore.lopestyle.dashboard.controllers.dto.FilterDto;
+import br.com.faststore.lopestyle.dashboard.services.ProductService;
 import br.com.faststore.lopestyle.models.Product;
-import br.com.faststore.lopestyle.services.ProductService;
 
 @RestController
-@RequestMapping("/products")
+@RequestMapping("dashboard/products")
 public class ProductController {
     
     @Autowired
@@ -29,14 +31,20 @@ public class ProductController {
     }
 
     @GetMapping("/all")
-    public ResponseEntity<List<Product>> getProducts() {
-        List<Product> products = productService.getProducts();
+    public ResponseEntity<Page<Product>> getProducts(@RequestBody FilterDto productsFilterDto) {
+        Page<Product> products = productService.getProductsPageable(productsFilterDto);
         return ResponseEntity.ok(products);
     }
 
-    @PostMapping("/createProduct")
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
-        return ResponseEntity.ok(productService.createProduct(product));
+    @GetMapping("/search")
+    public ResponseEntity<List<Product>> searchProducts(@RequestBody FilterDto productsFilterDto) {
+        List<Product> products = productService.getBySearch(productsFilterDto);
+        return ResponseEntity.ok(products);
+    }
+
+    @PostMapping("/insertProduct")
+    public ResponseEntity<Product> insertProduct(@RequestBody Product product) {
+        return ResponseEntity.ok(productService.insertProduct(product));
     }
 
     @PutMapping("/updateProduct/{productId}")

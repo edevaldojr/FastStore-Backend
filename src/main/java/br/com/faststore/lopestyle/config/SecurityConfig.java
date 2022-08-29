@@ -21,15 +21,16 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     private Environment env;
 
     public static final String[] PUBLIC_MATCHERS = {
-            "/h2-console/**"
+            "/h2-console/**",
+            "/dashboard/products/**"
     };
 
     public static final String[] PUBLIC_MATCHERS_GET = {
-
+        "/dashboard/products/**"
     };
 
     public static final String[] PUBLIC_MATCHERS_POST = {
-
+        "/dashboard/products/**"
     };
 
     @Override

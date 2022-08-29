@@ -21,12 +21,16 @@ import javax.persistence.JoinColumn;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Builder
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Product {
     
     @Id
@@ -37,17 +41,20 @@ public class Product {
     private String brand;
     private String description;
     private int inventory;
+ 
+    @JsonIgnore
+    @ManyToMany
+    @JoinTable(name = "PRODUCT_CATEGORY", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
+    private List<Category> categories;
 
     @JsonIgnore
     @ManyToMany
-    private List<Category> categories;
-    
-    @JsonIgnore
-    @ManyToMany
+    @JoinTable(name = "PRODUCT_SIZE", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "size_id"))
     private List<Size> sizes;
 
     @JsonIgnore
     @ManyToMany
+    @JoinTable(name = "PRODUCT_COLOR", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "color_id"))
     private List<Color> colors;
 
     @JsonIgnore
@@ -56,7 +63,7 @@ public class Product {
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
-    private Calendar  createdAt;
+    private Calendar createdAt;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar updatedAt;

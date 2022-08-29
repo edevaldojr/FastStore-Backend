@@ -25,7 +25,7 @@ public class Payment {
     private PaymentMethod method;
     @JsonIgnore
     @OneToOne
-    @JoinColumn(name = "orderId")
+    @JoinColumn(name = "order_id")
     @MapsId
     private Order order;
     

@@ -1,16 +1,17 @@
-package br.com.faststore.lopestyle.services;
+package br.com.faststore.lopestyle.dashboard.services;
 
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Date;
+import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import br.com.faststore.lopestyle.dashboard.controllers.dto.FilterDto;
+import br.com.faststore.lopestyle.dashboard.services.Exceptions.ObjectNotFoundException;
 import br.com.faststore.lopestyle.models.Product;
 import br.com.faststore.lopestyle.repositories.ProductRepository;
-import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
 
 @Service
 public class ProductService {
@@ -24,24 +25,27 @@ public class ProductService {
         return product;
     }
 
-    public List<Product> getProducts() {
-        List<Product> products = new ArrayList<>();
-        products = repository.findAll();
+    public Page<Product> getProductsPageable(FilterDto productsFilterDto) {
+        PageRequest pageable = PageRequest.of(productsFilterDto.getPage(), productsFilterDto.getPageSize());
+        Page<Product> products = repository.findAll(pageable);
         return products;
     }
 
-    public Product createProduct(Product product) {
-        LocalDate dateNow = LocalDate.now();
-       // product.setCreatedAt(dateNow);
-       // product.setUpdatedAt(dateNow);
+    public List<Product> getBySearch(FilterDto productsFilterDto) {
+        List<Product> products = repository.findByNameStartingWith(productsFilterDto.getSearch());
+        return products;
+    }
+
+    public Product insertProduct(Product product) {
         return repository.save(product);
     }
 
     public Product updateProduct(int productId, Product product) {
         Product prod = repository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
-        //LocalDate dateNow = LocalDate.now();
+        Calendar dateNow = Calendar.getInstance();
         prod = Product.builder()
+                        .id(productId)
                         .sku(product.getSku())
                         .name(product.getName())
                         .brand(product.getBrand())
@@ -51,8 +55,8 @@ public class ProductService {
                         .sizes(product.getSizes())
                         .images(product.getImages())
                         .description(product.getDescription())
-                        .createdAt(product.getCreatedAt())
-                        //.updatedAt(dateNow)
+                        .createdAt(prod.getCreatedAt())
+                        .updatedAt(dateNow)
                         .build();
                         
         return repository.save(prod);

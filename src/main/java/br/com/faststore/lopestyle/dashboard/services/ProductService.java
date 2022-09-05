@@ -32,7 +32,7 @@ public class ProductService {
     }
 
     public List<Product> getBySearch(FilterDto productsFilterDto) {
-        List<Product> products = repository.findByNameStartingWith(productsFilterDto.getSearch());
+        List<Product> products = repository.findByNameContaining(productsFilterDto.getSearch());
         return products;
     }
 

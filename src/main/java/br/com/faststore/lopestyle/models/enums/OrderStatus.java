@@ -1,4 +1,4 @@
-package br.com.faststore.lopestyle.models.utils;
+package br.com.faststore.lopestyle.models.enums;
 
 import lombok.Getter;
 

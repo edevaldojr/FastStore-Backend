@@ -10,6 +10,6 @@ import br.com.faststore.lopestyle.models.Product;
 @Repository
 public interface ProductRepository extends JpaRepository<Product, Integer>{
     
-    List<Product> findByNameStartingWith(String prefix);
+    List<Product> findByNameContaining(String infix);
     
 }

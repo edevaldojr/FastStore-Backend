@@ -18,7 +18,7 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import br.com.faststore.lopestyle.models.utils.OrderStatus;
+import br.com.faststore.lopestyle.models.enums.OrderStatus;
 import lombok.Data;
 
 @Data
@@ -43,7 +43,7 @@ public class Order {
 
 	@OneToMany
 	@JoinColumn(name = "orderProduct_id")
-    private List<OrderProduct> orderProduct;
+    private List<OrderProduct> orderProducts;
 	
 	@CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

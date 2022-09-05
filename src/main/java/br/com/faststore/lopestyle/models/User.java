@@ -1,26 +1,36 @@
 package br.com.faststore.lopestyle.models;
 
 import java.util.Calendar;
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
 
+import javax.persistence.CollectionTable;
 import javax.persistence.Column;
+import javax.persistence.DiscriminatorColumn;
+import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.Inheritance;
+import javax.persistence.InheritanceType;
+import javax.persistence.MappedSuperclass;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import lombok.AllArgsConstructor;
+import br.com.faststore.lopestyle.models.enums.Perfil;
 import lombok.Data;
 
+@Inheritance(strategy = InheritanceType.JOINED)
+@DiscriminatorColumn(name = "TYPE")
 @Data
 @Entity
-@AllArgsConstructor
 public class User {
     
     @Id
@@ -29,15 +39,44 @@ public class User {
     @Column(unique = true)
     private String email;
 
-    @JsonIgnore
     private String password;
     private String firstName;
     private String lastName;
+    
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "PERFIS")
+    private Set<Integer> perfis = new HashSet<>();
+
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar  createdAt;
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar updatedAt;
+
+    public User(int id, String email, String password, String firstName, String lastName, Set<Integer> perfis,
+            Calendar createdAt, Calendar updatedAt) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.perfis = perfis;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
+        addPerfil(Perfil.CONSUMER);
+    }
+
+    public User() {
+        addPerfil(Perfil.CONSUMER);
+    }
+
+    public Set<Perfil> getPerfis() {
+        return perfis.stream().map(x -> Perfil.toEnum(x)).collect(Collectors.toSet());
+    }
+
+    public void addPerfil(Perfil perfil) {
+        perfis.add(perfil.getCode());
+    }
     
 }

@@ -10,8 +10,8 @@ import javax.persistence.OneToOne;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import br.com.faststore.lopestyle.models.utils.PaymentMethod;
-import br.com.faststore.lopestyle.models.utils.PaymentStatus;
+import br.com.faststore.lopestyle.models.enums.PaymentMethod;
+import br.com.faststore.lopestyle.models.enums.PaymentStatus;
 import lombok.Data;
 
 @Data

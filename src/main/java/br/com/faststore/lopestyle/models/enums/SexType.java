@@ -1,11 +1,11 @@
-package br.com.faststore.lopestyle.models.utils;
+package br.com.faststore.lopestyle.models.enums;
 
 import lombok.Getter;
 
 public enum SexType {
     MALE("Masculino"),
-    FAMELA("Feminino"),
-    OUTRO("Outro");
+    FEMALE("Feminino"),
+    OTHER("Outro");
 
     @Getter
     private String translateStatus;

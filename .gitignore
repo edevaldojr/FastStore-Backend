@@ -1,4 +1,6 @@
 #Ignore arquivos 
 /resources/
 target/classes/application.properties
+src/main/java/br/com/faststore/lopestyle/config/SecurityConfig.java
+target/classes/br/com/faststore/lopestyle/ProcFile
 src/main/resources/application.properties

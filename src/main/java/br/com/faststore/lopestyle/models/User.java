@@ -78,5 +78,13 @@ public class User {
     public void addPerfil(Perfil perfil) {
         perfis.add(perfil.getCode());
     }
+
+    public void removePerfil(Perfil perfil) {
+        perfis.remove(perfil.getCode());
+    }
+
+    public Set<Integer> perfisToInteger(Set<Perfil> perfis) {
+        return perfis.stream().map(x -> Perfil.toInt(x)).collect(Collectors.toSet());
+    }
     
 }

@@ -2,9 +2,9 @@ package br.com.faststore.lopestyle.models.enums;
 
 public enum Perfil {
     
-    ADMIN(1, "ROLE_ADMIN"),
+    ADMIN(3, "ROLE_ADMIN"),
     EMPLOYEE(2, "ROLE_EMPLOYEE"),
-    CONSUMER(3, "ROLE_CONSUMER");
+    CONSUMER(1, "ROLE_CONSUMER");
 
     private int code;
     private String description;
@@ -35,6 +35,21 @@ public enum Perfil {
         }
 
         throw new IllegalArgumentException("Id inválido: " + code);
+    }
+
+    public static int toInt(Perfil perfil) {
+
+        if(perfil==null) {
+            return -1;
+        }
+
+        for(Perfil x : Perfil.values()) {
+            if(perfil.description.equals(x.getDescription())) {
+                return x.code;
+            }
+        }
+
+        throw new IllegalArgumentException("Id inválido: " + perfil);
     }
     
 }

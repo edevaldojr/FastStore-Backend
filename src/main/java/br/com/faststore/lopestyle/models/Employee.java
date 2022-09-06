@@ -29,7 +29,12 @@ public class Employee extends User {
         this.id = id;
         this.admin = admin;
         this.active = active;
-        this.addPerfil(Perfil.EMPLOYEE);
+    }
+
+    public boolean checkAdmin(boolean admin){
+        if(admin) addPerfil(Perfil.ADMIN);
+        else removePerfil(Perfil.ADMIN);
+        return admin;
     }
 
 }

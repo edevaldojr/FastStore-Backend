@@ -1,7 +1,9 @@
 package br.com.faststore.lopestyle.dashboard.services;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -12,6 +14,7 @@ import org.springframework.stereotype.Service;
 import br.com.faststore.lopestyle.dashboard.controllers.dto.FilterDto;
 import br.com.faststore.lopestyle.dashboard.services.Exceptions.ObjectNotFoundException;
 import br.com.faststore.lopestyle.models.Employee;
+import br.com.faststore.lopestyle.models.enums.Perfil;
 import br.com.faststore.lopestyle.repositories.EmployeeRepository;
 import br.com.faststore.lopestyle.repositories.UserRepository;
 
@@ -45,6 +48,8 @@ public class EmployeeService {
     }
 
     public Employee insertEmployee(Employee employee) {
+        employee.addPerfil(Perfil.EMPLOYEE);
+        if(employee.isAdmin())employee.addPerfil(Perfil.ADMIN);
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
         return repository.save(employee);
     }
@@ -52,18 +57,7 @@ public class EmployeeService {
     public Employee updateEmployee(int employeeId, Employee employee) {
         Employee emp= repository.findById(employeeId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + employeeId + ", Tipo: " + Employee.class.getName()));
-        Calendar dateNow = Calendar.getInstance();
-        emp = Employee.builder()
-                        .id(employeeId)
-                        .email(employee.getEmail())
-                        .password(employee.getPassword())
-                        .firstName(employee.getFirstName())
-                        .lastName(employee.getLastName())
-                        .active(employee.isActive())  
-                        .admin(employee.isAdmin())
-                        .createdAt(employee.getCreatedAt())
-                        .updatedAt(dateNow)
-                        .build();
+        emp = updateFields(emp, employee);
                         
         return repository.save(emp);
     }
@@ -72,6 +66,15 @@ public class EmployeeService {
         Employee employee = repository.findById(employeeId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + employeeId + ", Tipo: " + Employee.class.getName()));
         repository.delete(employee);
+    }
+
+    public Employee updateFields(Employee emp, Employee newEmp){
+        Calendar dateNow = Calendar.getInstance();
+        emp.setFirstName(newEmp.getFirstName());
+        emp.setLastName(newEmp.getLastName());
+        emp.setAdmin(emp.checkAdmin(newEmp.isAdmin()));
+        emp.setUpdatedAt(dateNow);
+        return emp;
     }
 
 }

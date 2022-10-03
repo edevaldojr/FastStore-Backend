@@ -38,9 +38,10 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     private Environment env;
 
     public static final String[] PUBLIC_MATCHERS = {
-            "/h2-console/**",
+            "/api/v1/registration/**",
             "/dashboard/products/**",
-            "/dashboard/employees/**"
+            "/dashboard/employees/**",
+            "/login**"
     };
 
     public static final String[] PUBLIC_MATCHERS_GET = {

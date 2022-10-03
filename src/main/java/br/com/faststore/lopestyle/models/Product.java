@@ -40,24 +40,20 @@ public class Product {
     private String name;
     private String brand;
     private String description;
-    private int inventory;
+    private int stock;
  
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "PRODUCT_CATEGORY", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "category_id"))
     private List<Category> categories;
 
-    @JsonIgnore
     @ManyToMany
     @JoinTable(name = "PRODUCT_SIZE", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "size_id"))
     private List<Size> sizes;
-
-    @JsonIgnore
+    
     @ManyToMany
     @JoinTable(name = "PRODUCT_COLOR", joinColumns = @JoinColumn(name = "product_id"), inverseJoinColumns = @JoinColumn(name = "color_id"))
     private List<Color> colors;
 
-    @JsonIgnore
     @OneToMany
     private List<Image> images;
 

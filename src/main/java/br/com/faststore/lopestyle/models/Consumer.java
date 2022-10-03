@@ -8,12 +8,10 @@ import java.util.Set;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
 import javax.persistence.OneToMany;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 
-import br.com.faststore.lopestyle.models.enums.Perfil;
 import br.com.faststore.lopestyle.models.enums.SexType;
 import lombok.Builder;
 import lombok.Data;

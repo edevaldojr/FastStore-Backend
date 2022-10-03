@@ -11,7 +11,8 @@ import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import br.com.faststore.lopestyle.dashboard.controllers.dto.CredentialsDTO;
+import br.com.faststore.lopestyle.controllers.dto.CredentialsDTO;
+import br.com.faststore.lopestyle.services.Exceptions.UserEmailNotEnabledException;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -67,9 +68,16 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
         public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
                 AuthenticationException exception)
                 throws IOException, ServletException {
-            response.setStatus(401);
-            response.setContentType("application/json");
-            response.getWriter().append(json());
+            if(exception.getMessage().startsWith("Email")) {
+                response.setStatus(401);
+                response.setContentType("application/json");
+                response.getWriter().append(jsonEmailNotEnabled(exception.getMessage()));
+            } else{
+                response.setStatus(401);
+                response.setContentType("application/json");
+                response.getWriter().append(json());
+            }     
+            
         }
 
         private String json() {
@@ -78,6 +86,15 @@ public class JWTAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                     + "\"status\": 401, "
                     + "\"error\": \"Não autorizado\", "
                     + "\"message\": \"Email ou senha inválidos\", "
+                    + "\"path\": \"/login\"}";
+        }
+
+        private String jsonEmailNotEnabled(String message) {
+            long date = new Date().getTime();
+            return "{\"timestamp\": " + date + ", "
+                    + "\"status\": 401, "
+                    + "\"error\": \"Não autorizado\", "
+                    + "\"message\": \"" + message + "\", "
                     + "\"path\": \"/login\"}";
         }
     }

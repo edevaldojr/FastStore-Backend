@@ -1,25 +1,54 @@
 package br.com.faststore.lopestyle.models.enums;
 
-import lombok.Getter;
-
 public enum SexType {
-    MALE("Masculino"),
-    FEMALE("Feminino"),
-    OTHER("Outro");
+    MALE(1,"Masculino"),
+    FEMALE(2,"Feminino"),
+    OTHER(3, "Outro");
 
-    @Getter
-    private String translateStatus;
+    private int code;
+    private String description;
 
-    SexType(String translateStatus) {
-        this.translateStatus = translateStatus;
+    private SexType(int code, String description) {
+        this.code = code;
+        this.description = description;
     }
 
-    public static String getTranslateStatus(String name) {
-        for (SexType status : SexType.values()) {
-            if (status.toString().equals(name)) {
-                return status.getTranslateStatus();
+    public int getCode() {
+        return code;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public static SexType toEnum(Integer code) {
+
+        if(code==null) {
+            return null;
+        }
+
+        for(SexType x : SexType.values()) {
+            if(code.equals(x.getCode())) {
+                return x;
             }
         }
-        return null;
+
+        throw new IllegalArgumentException("Id inválido: " + code);
     }
+
+    public static int toInt(SexType sexType) {
+
+        if(sexType==null) {
+            return -1;
+        }
+
+        for(SexType x : SexType.values()) {
+            if(sexType.description.equals(x.getDescription())) {
+                return x.code;
+            }
+        }
+
+        throw new IllegalArgumentException("Id inválido: " + sexType);
+    }
+    
 }

@@ -3,6 +3,7 @@ package br.com.faststore.lopestyle.controllers;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,25 +26,25 @@ public class CategoryController {
     private CaregoryService categoryService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Category>> getCategorys(@RequestBody FilterDto categorysFilterDto) {
-        List<Category> Categorys = categoryService.getAllCategories();
-        return ResponseEntity.ok(Categorys);
+    public ResponseEntity<Page<Category>> getCategories(@RequestBody FilterDto categorysFilterDto) {
+        Page<Category> categories = categoryService.getAllCategories(categorysFilterDto);
+        return ResponseEntity.ok(categories);
     }
 
     @PostMapping("/insertCategory")
-    public ResponseEntity<Category> insertCategory(@RequestBody Category Category) {
-        return ResponseEntity.ok(categoryService.insertCategory(Category));
+    public ResponseEntity<Category> insertCategory(@RequestBody Category category) {
+        return ResponseEntity.ok(categoryService.insertCategory(category));
     }
 
-    @PutMapping("/updateCategory/{CategoryId}")
-    public ResponseEntity<Category> updateCategory(@PathVariable("CategoryId") int CategoryId,@RequestBody Category Category) {
-        return ResponseEntity.ok(categoryService.updateCategory(CategoryId, Category));
+    @PutMapping("/updateCategory/{categoryId}")
+    public ResponseEntity<Category> updateCategory(@PathVariable("categoryId") int categoryId,@RequestBody Category category) {
+        return ResponseEntity.ok(categoryService.updateCategory(categoryId, category));
     }
 
-    @DeleteMapping("/deleteCategory/{CategoryId}")
-    public ResponseEntity<Void> deleteCategory(@PathVariable("CategoryId") int CategoryId) {
-        categoryService.deleteCategory(CategoryId);
-        return ResponseEntity.noContent().build();
+    @DeleteMapping("/deleteCategory/{categoryId}")
+    public ResponseEntity<Void> deleteCategory(@PathVariable("categoryId") int categoryId) {
+        categoryService.deleteCategory(categoryId);
+        return ResponseEntity.ok().build();
     }
 
 

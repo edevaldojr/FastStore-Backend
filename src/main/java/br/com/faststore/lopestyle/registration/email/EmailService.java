@@ -27,11 +27,11 @@ public class EmailService implements EmailSender{
                     new MimeMessageHelper(mimeMessage, "utf-8");
             helper.setText(email, true);
             helper.setTo(to);
-            helper.setSubject("Confirm your email");
-            helper.setFrom("hello@amigoscode.com");
+            helper.setSubject("Confirme seu email");
+            helper.setFrom("lopestyle@gmail.com");
             mailSender.send(mimeMessage);
-        } catch (MessagingException e) {
-            log.error("failed to send email", e);
+        } catch (MessagingException exception) {
+            log.error("failed to send email", exception);
             throw new IllegalStateException("failed to send email");
         }
     }

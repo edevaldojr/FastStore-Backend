@@ -3,21 +3,21 @@ package br.com.faststore.lopestyle.models;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
-@Entity
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class Image {
+@Entity
+public class Stock {
     
     @Id
     private int id;
-    private String urlImage;
-    
+    private int quantity;
+    private String color;
+    private String size;
+
     @ManyToOne
     private Product product;
+
 }

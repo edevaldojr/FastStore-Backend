@@ -89,6 +89,8 @@ public class RegistrationService {
         employee.addPerfil(Perfil.EMPLOYEE);
         employee.setPassword(passwordEncoder.encode(employee.getPassword()));
 
+        if(employee.isAdmin()) employee.addPerfil(Perfil.ADMIN);
+
         boolean isValidEmail = emailValidator.test(employee.getEmail());
 
         if(!isValidEmail) {

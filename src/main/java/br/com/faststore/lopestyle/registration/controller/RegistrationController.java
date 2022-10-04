@@ -14,7 +14,7 @@ import br.com.faststore.lopestyle.registration.service.RegistrationService;
 import lombok.AllArgsConstructor;
 
 @RestController
-@RequestMapping("api/v1/registration")
+@RequestMapping("/registration")
 @AllArgsConstructor
 public class RegistrationController {
     

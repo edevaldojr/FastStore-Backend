@@ -38,20 +38,14 @@ public class SecurityConfig  extends WebSecurityConfigurerAdapter {
     private Environment env;
 
     public static final String[] PUBLIC_MATCHERS = {
-            "/api/v1/registration/**",
-            "/dashboard/products/**",
-            "/dashboard/employees/**",
+            "/registration/**",
             "/login**"
     };
 
     public static final String[] PUBLIC_MATCHERS_GET = {
-        "/dashboard/products/**",
-        "/dashboard/employees/**"
     };
 
     public static final String[] PUBLIC_MATCHERS_POST = {
-        "/dashboard/products/**",
-        "/dashboard/employees/**"
     };
 
     @Override

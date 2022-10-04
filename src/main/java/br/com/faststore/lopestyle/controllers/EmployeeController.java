@@ -19,7 +19,7 @@ import br.com.faststore.lopestyle.models.Employee;
 import br.com.faststore.lopestyle.services.EmployeeService;
 
 @RestController
-@RequestMapping("dashboard/employees")
+@RequestMapping("/employees")
 public class EmployeeController {
     
     @Autowired
@@ -40,11 +40,6 @@ public class EmployeeController {
     public ResponseEntity<List<Employee>> searchEmployees(@RequestBody FilterDto employeesFilterDto) {
         List<Employee> employees = employeeService.getBySearch(employeesFilterDto);
         return ResponseEntity.ok(employees);
-    }
-
-    @PostMapping("/insertEmployee")
-    public ResponseEntity<Employee> insertEmployee(@RequestBody Employee employee) {
-        return ResponseEntity.ok(employeeService.insertEmployee(employee));
     }
 
     @PutMapping("/updateEmployee/{employeeId}")

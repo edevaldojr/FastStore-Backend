@@ -43,8 +43,6 @@ public class ProductService {
     }
 
     public Product insertProduct(Product product) {
-        product = verifyCategory(product);
-
         return repository.save(product);
     }
 
@@ -57,16 +55,11 @@ public class ProductService {
                         .sku(product.getSku())
                         .name(product.getName())
                         .brand(product.getBrand())
-                        .stock(product.getStock())
-                        .categories(product.getCategories())
-                        .colors(product.getColors())
-                        .sizes(product.getSizes())
-                        .images(product.getImages())
+                        .category(product.getCategory())
                         .description(product.getDescription())
                         .createdAt(prod.getCreatedAt())
                         .updatedAt(dateNow)
                         .build();
-                        
         return repository.save(prod);
     }
 
@@ -74,22 +67,6 @@ public class ProductService {
         Product prod = repository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
         repository.delete(prod);
-    }
-    
-    public Product verifyCategory(Product product) {
-        List<Category> categories = categoryRepository.findAll();
-
-        product.getCategories().removeIf(c-> {
-            Optional<Category> category = categories.stream().filter(cat-> cat.getId() != c.getId()).findFirst();
-            if(category.isPresent()){
-                if(c.getId() != category.get().getId()) return true;
-                else return false;
-            } else {
-                return false;
-            }
-        });
-
-        return product;
     }
     
     

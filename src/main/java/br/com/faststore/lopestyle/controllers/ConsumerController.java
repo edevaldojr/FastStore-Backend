@@ -19,7 +19,7 @@ import br.com.faststore.lopestyle.models.Consumer;
 import br.com.faststore.lopestyle.services.ConsumerService;
 
 @RestController
-@RequestMapping("dashboard/consumer")
+@RequestMapping("/consumer")
 public class ConsumerController {
     
     @Autowired

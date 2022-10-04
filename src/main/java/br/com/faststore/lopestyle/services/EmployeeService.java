@@ -55,13 +55,6 @@ public class EmployeeService {
         return employees;
     }
 
-    public Employee insertEmployee(Employee employee) {
-        employee.addPerfil(Perfil.EMPLOYEE);
-        if(employee.isAdmin())employee.addPerfil(Perfil.ADMIN);
-        employee.setPassword(passwordEncoder.encode(employee.getPassword()));
-        return repository.save(employee);
-    }
-
     public Employee updateEmployee(int employeeId, Employee employee) {
         Employee emp= repository.findById(employeeId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + employeeId + ", Tipo: " + Employee.class.getName()));

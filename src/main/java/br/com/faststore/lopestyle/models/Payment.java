@@ -13,9 +13,11 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import br.com.faststore.lopestyle.models.enums.PaymentMethod;
 import br.com.faststore.lopestyle.models.enums.PaymentStatus;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode
 public class Payment {
 
     @Id

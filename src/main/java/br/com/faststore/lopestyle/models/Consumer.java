@@ -32,7 +32,7 @@ public class Consumer extends User {
 	@JsonFormat(pattern = "dd/MM/yyyy")
     private Date birthDate;
     private SexType sexo;
-    private boolean active;
+
     @OneToMany
     private List<Order> orders;
 
@@ -40,13 +40,12 @@ public class Consumer extends User {
     public Consumer(int id, String email, String password, String firstName, String lastName, Set<Integer> perfis, Calendar createdAt,
             Calendar updatedAt, String cpf, String phoneNumber, Date birthDate, SexType sexo, boolean active,
             List<Order> orders) {
-        super(id, email, password, firstName, lastName, perfis, createdAt, updatedAt);
+        super(id, email, password, firstName, lastName, perfis, createdAt, updatedAt, active);
         this.id = id;
         this.cpf = cpf;
         this.phoneNumber = phoneNumber;
         this.birthDate = birthDate;
         this.sexo = sexo;
-        this.active = active;
         this.orders = orders;
     }
 

@@ -1,5 +1,6 @@
 package br.com.faststore.lopestyle.controllers;
 
+import java.net.URI;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,13 +14,14 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.faststore.lopestyle.controllers.dto.FilterDto;
 import br.com.faststore.lopestyle.models.Category;
 import br.com.faststore.lopestyle.services.CaregoryService;
 
 @RestController
-@RequestMapping("dashboard/category")
+@RequestMapping("/categories")
 public class CategoryController {
     
     @Autowired
@@ -31,20 +33,23 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
-    @PostMapping("/insertCategory")
+    @PostMapping("/category")
     public ResponseEntity<Category> insertCategory(@RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.insertCategory(category));
+        category = categoryService.insertCategory(category);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
+                .path("/{id}").buildAndExpand(category.getId()).toUri();
+        return ResponseEntity.created(uri).build();
     }
 
-    @PutMapping("/updateCategory/{categoryId}")
-    public ResponseEntity<Category> updateCategory(@PathVariable("categoryId") int categoryId,@RequestBody Category category) {
-        return ResponseEntity.ok(categoryService.updateCategory(categoryId, category));
+    @PutMapping("/category/{categoryId}")
+    public ResponseEntity<Void> updateCategory(@PathVariable("categoryId") int categoryId,@RequestBody Category category) {
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/deleteCategory/{categoryId}")
+    @DeleteMapping("/category/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable("categoryId") int categoryId) {
         categoryService.deleteCategory(categoryId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 
 

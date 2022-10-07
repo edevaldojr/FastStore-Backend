@@ -10,64 +10,98 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.com.faststore.lopestyle.controllers.dto.FilterDto;
+import br.com.faststore.lopestyle.controllers.dto.ProductStockDTO;
 import br.com.faststore.lopestyle.models.Category;
+import br.com.faststore.lopestyle.models.Image;
 import br.com.faststore.lopestyle.models.Product;
+import br.com.faststore.lopestyle.models.Stock;
 import br.com.faststore.lopestyle.repositories.CategoryRepository;
+import br.com.faststore.lopestyle.repositories.ImageRepository;
 import br.com.faststore.lopestyle.repositories.ProductRepository;
+import br.com.faststore.lopestyle.repositories.StockRepository;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
 
 @Service
 public class ProductService {
 
     @Autowired
-    private ProductRepository repository;
+    private ProductRepository productRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
 
+    @Autowired
+    private StockRepository stockRepository;
+
+
     public Product getProduct(int productId) {
-        Product product = repository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
                                 "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
         return product;
     }
 
     public Page<Product> getProductsPageable(FilterDto productsFilterDto) {
         PageRequest pageable = PageRequest.of(productsFilterDto.getPage(), productsFilterDto.getPageSize());
-        Page<Product> products = repository.findAll(pageable);
+        Page<Product> products = productRepository.findAllByActiveTrue(pageable);
         return products;
     }
 
     public List<Product> getBySearch(FilterDto productsFilterDto) {
-        List<Product> products = repository.findByNameContaining(productsFilterDto.getSearch());
+        List<Product> products = productRepository.findByActiveTrueAndNameContaining(productsFilterDto.getSearch());
         return products;
     }
 
-    public Product insertProduct(Product product) {
-        return repository.save(product);
+    public Product insertProduct(int categoryId, ProductStockDTO productStockDTO) {
+        Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ObjectNotFoundException(
+            "Categoria não encontrada! Id: " + categoryId + ", Tipo: " + Category.class.getName()));
+        Product product = productStockDTO.getProduct();
+
+        product.setCategory(category);
+        productRepository.save(product);
+        setProductToStock(productStockDTO);
+        return product;
     }
 
-    public Product updateProduct(int productId, Product product) {
-        Product prod = repository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
+    public Product updateProduct(int productId, ProductStockDTO productDTO) {
+        Product prod = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
+
+        Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new ObjectNotFoundException(
+            "Categoria não encontrada! Id: " + productDTO.getCategoryId() + ", Tipo: " + Category.class.getName()));
+
         Calendar dateNow = Calendar.getInstance();
         prod = Product.builder()
                         .id(productId)
-                        .sku(product.getSku())
-                        .name(product.getName())
-                        .brand(product.getBrand())
-                        .category(product.getCategory())
-                        .description(product.getDescription())
+                        .sku(productDTO.getProduct().getSku())
+                        .name(productDTO.getProduct().getName())
+                        .brand(productDTO.getProduct().getBrand())
+                        .category(category)
+                        .description(productDTO.getProduct().getDescription())
                         .createdAt(prod.getCreatedAt())
                         .updatedAt(dateNow)
                         .build();
-        return repository.save(prod);
+                        
+        return productRepository.save(prod);
     }
 
     public void deleteProduct(int productId) {
-        Product prod = repository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
+        Product prod = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
-        repository.delete(prod);
+        prod.setActive(false);
+        productRepository.save(prod);
     }
     
-    
+    public void setProductToStock(ProductStockDTO productStockDTO){
+        
+        List<Stock> stocks = productStockDTO.getStock();
+        stocks.stream().forEach(s -> {
+            s.setProduct(productStockDTO.getProduct());
+        });
+        productStockDTO.getProduct().setStocks(stocks);
+        stockRepository.saveAll(stocks);
+        Product product = productRepository.findBySku(productStockDTO.getProduct().getSku());
+        product.setStocks(stocks);
+        productRepository.save(product);
+    }
+
 }

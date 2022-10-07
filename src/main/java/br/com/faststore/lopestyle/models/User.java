@@ -48,6 +48,7 @@ public class User {
 
     private Boolean locked = false;
     private Boolean enabled = false;
+    private boolean active;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -57,7 +58,7 @@ public class User {
     private Calendar updatedAt;
 
     public User(int id, String email, String password, String firstName, String lastName, Set<Integer> perfis,
-            Calendar createdAt, Calendar updatedAt) {
+            Calendar createdAt, Calendar updatedAt, boolean active) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -66,6 +67,7 @@ public class User {
         this.perfis = perfis;
         this.createdAt = createdAt;
         this.updatedAt = updatedAt;
+        this.active = active;
         addPerfil(Perfil.CONSUMER);
     }
 

@@ -27,29 +27,30 @@ public class EmployeeController {
 
     @GetMapping("/{employeeId}")
     public ResponseEntity<Employee> getEmployee(@PathVariable("employeeId") int employeeId) {
-        return ResponseEntity.ok(employeeService.getEmployee(employeeId));
+        return ResponseEntity.ok().body(employeeService.getEmployee(employeeId));
     }
     
     @GetMapping("/all")
     public ResponseEntity<Page<Employee>> getEmployees(@RequestBody FilterDto employeesFilterDto) {
         Page<Employee> employees = employeeService.getEmployeesPageable(employeesFilterDto);
-        return ResponseEntity.ok(employees);
+        return ResponseEntity.ok().body(employees);
     }
 
     @GetMapping("/search")
     public ResponseEntity<List<Employee>> searchEmployees(@RequestBody FilterDto employeesFilterDto) {
         List<Employee> employees = employeeService.getBySearch(employeesFilterDto);
-        return ResponseEntity.ok(employees);
+        return ResponseEntity.ok().body(employees);
     }
 
-    @PutMapping("/updateEmployee/{employeeId}")
+    @PutMapping("/employee/{employeeId}")
     public ResponseEntity<Employee> updateEmployee(@PathVariable("employeeId") int employeeId,@RequestBody Employee employee) {
-        return ResponseEntity.ok(employeeService.updateEmployee(employeeId, employee));
+        employeeService.updateEmployee(employeeId, employee);
+        return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping("/deleteEmployee/{employeeId}")
+    @DeleteMapping("/eemployee/{employeeId}")
     public ResponseEntity<Void> deleteEmployee(@PathVariable("employeeId") int employeeId) {
         employeeService.deleteEmployee(employeeId);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.noContent().build();
     }
 }

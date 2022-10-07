@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import org.springframework.data.domain.Page;
@@ -15,7 +14,6 @@ import org.springframework.data.domain.Page;
 import br.com.faststore.lopestyle.controllers.dto.FilterDto;
 import br.com.faststore.lopestyle.models.Consumer;
 import br.com.faststore.lopestyle.models.User;
-import br.com.faststore.lopestyle.models.enums.Perfil;
 import br.com.faststore.lopestyle.repositories.ConsumerRepository;
 import br.com.faststore.lopestyle.repositories.UserRepository;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
@@ -37,12 +35,12 @@ public class ConsumerService {
 
     public Page<Consumer> getConsumersPageable(FilterDto consumersFilterDto) {
         PageRequest pageable = PageRequest.of(consumersFilterDto.getPage(), consumersFilterDto.getPageSize());
-        Page<Consumer> consumers = repository.findAll(pageable);
+        Page<Consumer> consumers = repository.findByEnabledTrue(pageable);
         return consumers;
     }
 
     public List<Consumer> getBySearch(FilterDto consumersFilterDto) {
-        List<User> user = userRepository.findByFirstNameContaining(consumersFilterDto.getSearch());
+        List<User> user = userRepository.findByActiveTrueAndFirstNameContaining(consumersFilterDto.getSearch());
         List<Consumer> consumers = new ArrayList<>();
         user.stream().forEach(u->{
             Optional<Consumer> consumer = repository.findById(u.getId());

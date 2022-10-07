@@ -1,15 +1,16 @@
 package br.com.faststore.lopestyle.models;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
@@ -18,7 +19,8 @@ import javax.persistence.TemporalType;
 import org.hibernate.annotations.CreationTimestamp;
 import org.hibernate.annotations.UpdateTimestamp;
 
-import javax.persistence.JoinColumn;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 
 import lombok.AllArgsConstructor;
@@ -36,6 +38,7 @@ public class Product {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+    @Column(unique = true)
     private String sku;
     private String name;
     private String brand;
@@ -44,11 +47,17 @@ public class Product {
     @ManyToOne
     private Category category;
 
-    @OneToMany
+    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
     private List<Stock> stocks;
 
-    @OneToMany
+    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
     private List<Image> images;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "id.product")
+    private Set<OrderProduct> orderProducts = new HashSet<>();
+
+    private boolean active;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)

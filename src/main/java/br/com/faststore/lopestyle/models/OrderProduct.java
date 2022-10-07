@@ -1,5 +1,6 @@
 package br.com.faststore.lopestyle.models;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -8,23 +9,32 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode
 public class OrderProduct {
 
-    @Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int id;
+    @JsonIgnore
+    @EmbeddedId
+    private OrderProductPK id = new OrderProductPK();
     private int quantity;
-    private int discount;
+    private double discount;
     private double unityValue;
     private double totalValue;
-    @OneToOne
-    @JoinColumn(name = "product_id")
-    private Product product;
-    @ManyToOne
-    private Order order;
+
+
+    public OrderProduct(Order order, Product product, Double discount, int quantity, Double unityValue, Double totalValue) {
+        id.setOrder(order);
+        id.setProduct(product);
+        this.discount = discount;
+        this.quantity = quantity;
+        this.unityValue = unityValue;
+        this.unityValue = totalValue;
+    }
 
 }

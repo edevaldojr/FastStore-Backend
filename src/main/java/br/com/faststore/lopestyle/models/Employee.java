@@ -20,15 +20,13 @@ public class Employee extends User {
     @Id
     private int id;
     private boolean admin;
-    private boolean active;
 
     @Builder
     public Employee(int id, String email, String password, String firstName, String lastName, Set<Integer> perfis, Calendar createdAt,
     Calendar updatedAt, boolean admin, boolean active) {
-        super(id, email, password, firstName, lastName, perfis,createdAt, updatedAt);
+        super(id, email, password, firstName, lastName, perfis,createdAt, updatedAt, active);
         this.id = id;
         this.admin = admin;
-        this.active = active;
     }
 
     public boolean checkAdmin(boolean admin){

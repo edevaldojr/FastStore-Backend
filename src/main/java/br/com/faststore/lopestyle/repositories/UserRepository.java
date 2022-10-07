@@ -15,10 +15,10 @@ import br.com.faststore.lopestyle.models.User;
 @Repository
 public interface UserRepository extends JpaRepository<User, Integer>{
     
-    List<User> findByFirstNameContaining(String infix);
-
     Optional<User> findByEmail(String email);
     
+    List<User> findByActiveTrueAndFirstNameContaining(String firstName);
+
     @Transactional
     @Modifying
     @Query("UPDATE User a " +

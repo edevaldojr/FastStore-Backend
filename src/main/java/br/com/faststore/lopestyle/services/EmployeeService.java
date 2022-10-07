@@ -8,22 +8,17 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import br.com.faststore.lopestyle.controllers.dto.FilterDto;
 import br.com.faststore.lopestyle.models.Employee;
 import br.com.faststore.lopestyle.models.User;
-import br.com.faststore.lopestyle.models.enums.Perfil;
 import br.com.faststore.lopestyle.repositories.EmployeeRepository;
 import br.com.faststore.lopestyle.repositories.UserRepository;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
 
 @Service
 public class EmployeeService {
-    
-    @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
 
     @Autowired
     private EmployeeRepository repository;
@@ -44,7 +39,7 @@ public class EmployeeService {
     }
 
     public List<Employee> getBySearch(FilterDto employeesFilterDto) {
-        List<User> user = userRepository.findByFirstNameContaining(employeesFilterDto.getSearch());
+        List<User> user = userRepository.findByActiveTrueAndFirstNameContaining(employeesFilterDto.getSearch());
         List<Employee> employees = new ArrayList<>();
         user.stream().forEach(u->{
             Optional<Employee> employee = repository.findById(u.getId());
@@ -66,7 +61,8 @@ public class EmployeeService {
     public void deleteEmployee(int employeeId) {
         Employee employee = repository.findById(employeeId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + employeeId + ", Tipo: " + Employee.class.getName()));
-        repository.delete(employee);
+        employee.setActive(false);
+        repository.save(employee);
     }
 
     public Employee updateFields(Employee emp, Employee newEmp){

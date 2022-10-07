@@ -20,3 +20,5 @@ Emaildev: http://127.0.0.1:1080/
 04 Oct - Crud de categorias finalizado
 04 Oct - Remodelando classes de produtos e banco de dados
 04 Oct - Problema no mapeamento de produtos com outros objetos
+06 Oct - Resolvendo o problema no mapeamento e otimizando as API's para um padrao REST
+07 Oct - Integração com AWS S3 para armazenamento de imagens, pegando url da imagem do bucket e salvando no banco

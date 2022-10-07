@@ -1,13 +1,17 @@
 package br.com.faststore.lopestyle.services;
 
+import java.net.URI;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
+
+import java.awt.image.BufferedImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import br.com.faststore.lopestyle.controllers.dto.FilterDto;
 import br.com.faststore.lopestyle.controllers.dto.ProductStockDTO;
@@ -19,7 +23,10 @@ import br.com.faststore.lopestyle.repositories.CategoryRepository;
 import br.com.faststore.lopestyle.repositories.ImageRepository;
 import br.com.faststore.lopestyle.repositories.ProductRepository;
 import br.com.faststore.lopestyle.repositories.StockRepository;
+import br.com.faststore.lopestyle.security.UserSS;
+import br.com.faststore.lopestyle.services.Exceptions.AuthorizationException;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
+
 
 @Service
 public class ProductService {
@@ -32,6 +39,15 @@ public class ProductService {
 
     @Autowired
     private StockRepository stockRepository;
+    
+    @Autowired
+    private ImageRepository imageRepository;
+
+    @Autowired
+    private ImageService imageService;
+
+    @Autowired
+    private S3Service s3Service;
 
 
     public Product getProduct(int productId) {
@@ -102,6 +118,30 @@ public class ProductService {
         Product product = productRepository.findBySku(productStockDTO.getProduct().getSku());
         product.setStocks(stocks);
         productRepository.save(product);
+    }
+
+
+    public URI uploadProductPicture(MultipartFile multipartFile, int productId) {
+
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
+            "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
+
+        Image imageProduct = new Image();
+        imageProduct.setProduct(product);
+        
+        UserSS user = UserService.authenticated();
+        if (user == null) {
+            throw new AuthorizationException("Acesso negado");
+        }
+
+        BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
+
+        String fileName = product.getName() + "-" + product.getSku() +"-" + product.getImages().size() + ".jpg";
+        URI imageUri = s3Service.uploadFile(imageService.getInputStream(jpgImage,"jpg"), fileName, "image");
+
+        imageProduct.setUrlImage(imageUri.toString());
+        imageRepository.save(imageProduct);
+        return imageUri;
     }
 
 }

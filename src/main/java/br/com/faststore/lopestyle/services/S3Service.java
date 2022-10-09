@@ -48,4 +48,15 @@ public class S3Service {
             throw new FileException("Erro ao converter URL para URI");
         }
     }
+
+    public void deleteFile(String fileName) {
+        try {
+            log.info("Iniciando deleção");
+            s3client.deleteObject(bucketName, fileName);
+            log.info("Deleção finalizada");
+        } catch (Exception exception) {
+            throw new FileException("Erro ao deletar objeto do bucket");
+        }
+    }
+
 }

@@ -7,7 +7,5 @@ import br.com.faststore.lopestyle.models.Stock;
 
 @Repository
 public interface StockRepository extends JpaRepository<Stock, Integer>{
-    
-
 
 }

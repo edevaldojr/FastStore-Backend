@@ -2,6 +2,7 @@ package br.com.faststore.lopestyle.models;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -25,8 +26,4 @@ public class Image {
     private int id;
     private String urlImage;
     
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private Product product;
 }

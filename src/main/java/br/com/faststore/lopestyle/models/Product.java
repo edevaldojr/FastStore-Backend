@@ -47,10 +47,10 @@ public class Product {
     @ManyToOne
     private Category category;
 
-    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
-    private List<Stock> stocks;
+    @OneToMany(cascade=CascadeType.ALL)
+    private List<Stock> stock;
 
-    @OneToMany(mappedBy = "product", cascade=CascadeType.ALL)
+    @OneToMany( cascade=CascadeType.ALL)
     private List<Image> images;
 
     @JsonIgnore
@@ -65,5 +65,14 @@ public class Product {
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar updatedAt;
+
+
+    public void removeImageFromProduct(Image image) {
+        this.images.remove(image);
+    }
+
+    public void removeStockFromProduct(Stock stock) {
+        this.stock.remove(stock);
+    }
 
 }

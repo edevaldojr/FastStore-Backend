@@ -1,30 +1,22 @@
 package br.com.faststore.lopestyle.services;
 
-import java.net.URI;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
-
-import java.awt.image.BufferedImage;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
 import br.com.faststore.lopestyle.controllers.dto.FilterDto;
-import br.com.faststore.lopestyle.controllers.dto.ProductStockDTO;
+import br.com.faststore.lopestyle.controllers.dto.ProductDTO;
 import br.com.faststore.lopestyle.models.Category;
-import br.com.faststore.lopestyle.models.Image;
 import br.com.faststore.lopestyle.models.Product;
 import br.com.faststore.lopestyle.models.Stock;
 import br.com.faststore.lopestyle.repositories.CategoryRepository;
-import br.com.faststore.lopestyle.repositories.ImageRepository;
 import br.com.faststore.lopestyle.repositories.ProductRepository;
 import br.com.faststore.lopestyle.repositories.StockRepository;
-import br.com.faststore.lopestyle.security.UserSS;
-import br.com.faststore.lopestyle.services.Exceptions.AuthorizationException;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
 
 
@@ -39,21 +31,20 @@ public class ProductService {
 
     @Autowired
     private StockRepository stockRepository;
-    
-    @Autowired
-    private ImageRepository imageRepository;
-
-    @Autowired
-    private ImageService imageService;
-
-    @Autowired
-    private S3Service s3Service;
-
 
     public Product getProduct(int productId) {
         Product product = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
-                                "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
+                                "Produto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
         return product;
+    }
+
+    public Page<Stock> getStockFromProduct(int productId, FilterDto filterDto) {
+        Product product = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
+                                "Produto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
+        PageRequest pageable = PageRequest.of(filterDto.getPage(), filterDto.getPageSize());
+        Page<Stock> productStock = new PageImpl<>(product.getStock(), pageable, product.getStock().size());
+        
+        return productStock;
     }
 
     public Page<Product> getProductsPageable(FilterDto productsFilterDto) {
@@ -67,20 +58,19 @@ public class ProductService {
         return products;
     }
 
-    public Product insertProduct(int categoryId, ProductStockDTO productStockDTO) {
+    public Product insertProduct(int categoryId, ProductDTO productDTO) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(() -> new ObjectNotFoundException(
             "Categoria não encontrada! Id: " + categoryId + ", Tipo: " + Category.class.getName()));
-        Product product = productStockDTO.getProduct();
+        Product product = productDTO.getProduct();
 
         product.setCategory(category);
         productRepository.save(product);
-        setProductToStock(productStockDTO);
         return product;
     }
 
-    public Product updateProduct(int productId, ProductStockDTO productDTO) {
+    public Product updateProduct(int productId, ProductDTO productDTO) {
         Product prod = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
-            "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
+            "Produto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
 
         Category category = categoryRepository.findById(productDTO.getCategoryId()).orElseThrow(() -> new ObjectNotFoundException(
             "Categoria não encontrada! Id: " + productDTO.getCategoryId() + ", Tipo: " + Category.class.getName()));
@@ -88,7 +78,7 @@ public class ProductService {
         Calendar dateNow = Calendar.getInstance();
         prod = Product.builder()
                         .id(productId)
-                        .sku(productDTO.getProduct().getSku())
+                        .sku(prod.getSku())
                         .name(productDTO.getProduct().getName())
                         .brand(productDTO.getProduct().getBrand())
                         .category(category)
@@ -102,46 +92,18 @@ public class ProductService {
 
     public void deleteProduct(int productId) {
         Product prod = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
-            "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
+            "Produto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
         prod.setActive(false);
         productRepository.save(prod);
     }
-    
-    public void setProductToStock(ProductStockDTO productStockDTO){
-        
-        List<Stock> stocks = productStockDTO.getStock();
-        stocks.stream().forEach(s -> {
-            s.setProduct(productStockDTO.getProduct());
-        });
-        productStockDTO.getProduct().setStocks(stocks);
+
+    public void setProductToStock(ProductDTO productDTO){
+        Product product = productRepository.findBySku(productDTO.getProduct().getSku()); 
+        List<Stock> stocks = productDTO.getStock();
+
+        product.setStock(stocks);
         stockRepository.saveAll(stocks);
-        Product product = productRepository.findBySku(productStockDTO.getProduct().getSku());
-        product.setStocks(stocks);
         productRepository.save(product);
-    }
-
-
-    public URI uploadProductPicture(MultipartFile multipartFile, int productId) {
-
-        Product product = productRepository.findById(productId).orElseThrow(() -> new ObjectNotFoundException(
-            "Objeto não encontrado! Id: " + productId + ", Tipo: " + Product.class.getName()));
-
-        Image imageProduct = new Image();
-        imageProduct.setProduct(product);
-        
-        UserSS user = UserService.authenticated();
-        if (user == null) {
-            throw new AuthorizationException("Acesso negado");
-        }
-
-        BufferedImage jpgImage = imageService.getJpgImageFromFile(multipartFile);
-
-        String fileName = product.getName() + "-" + product.getSku() +"-" + product.getImages().size() + ".jpg";
-        URI imageUri = s3Service.uploadFile(imageService.getInputStream(jpgImage,"jpg"), fileName, "image");
-
-        imageProduct.setUrlImage(imageUri.toString());
-        imageRepository.save(imageProduct);
-        return imageUri;
     }
 
 }

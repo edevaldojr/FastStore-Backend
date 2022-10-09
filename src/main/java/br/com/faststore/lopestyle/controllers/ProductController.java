@@ -14,14 +14,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import br.com.faststore.lopestyle.controllers.dto.FilterDto;
-import br.com.faststore.lopestyle.controllers.dto.ProductStockDTO;
+import br.com.faststore.lopestyle.controllers.dto.ProductDTO;
 import br.com.faststore.lopestyle.models.Product;
+import br.com.faststore.lopestyle.models.Stock;
 import br.com.faststore.lopestyle.services.ProductService;
 
 @RestController
@@ -49,8 +48,8 @@ public class ProductController {
     }
 
     @PostMapping("/product/{categoryId}")
-    public ResponseEntity<Product> insertProduct(@PathVariable("categoryId") int categoryId, @RequestBody ProductStockDTO  productStockDTO) {
-        Product product = productService.insertProduct(categoryId, productStockDTO);
+    public ResponseEntity<Product> insertProduct(@PathVariable("categoryId") int categoryId, @RequestBody ProductDTO  productDTO) {
+        Product product = productService.insertProduct(categoryId, productDTO);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}").buildAndExpand(product.getId()).toUri();
         return ResponseEntity.created(uri).build();
@@ -58,7 +57,7 @@ public class ProductController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/product/{productId}")
-    public ResponseEntity<Product> updateProduct(@PathVariable("productId") int productId, @RequestBody ProductStockDTO productDTO) {
+    public ResponseEntity<Product> updateProduct(@PathVariable("productId") int productId, @RequestBody ProductDTO productDTO) {
         productService.updateProduct(productId, productDTO);
         return ResponseEntity.noContent().build();
     }
@@ -69,11 +68,10 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
-
-    @PostMapping("/product/{productId}/upload")
-    public ResponseEntity<Void> uploadProductImage(@PathVariable("productId") int productId, @RequestParam(name = "file") MultipartFile file) {
-        URI uri = productService.uploadProductPicture(file, productId);
-        return ResponseEntity.created(uri).build();
+    
+    @GetMapping("/stock/{productId}")
+    public ResponseEntity<Page<Stock>> getStocksFromProduct(@PathVariable("productId") int productId, @RequestBody FilterDto filterDto) {
+        return ResponseEntity.ok().body(productService.getStockFromProduct(productId, filterDto));
     }
 
 }

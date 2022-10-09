@@ -24,10 +24,4 @@ public class Stock {
     private int quantity;
     private String color;
     private String size;
-
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="product_id")
-    private Product product;
-
 }

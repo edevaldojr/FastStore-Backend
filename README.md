@@ -22,3 +22,5 @@ Emaildev: http://127.0.0.1:1080/
 04 Oct - Problema no mapeamento de produtos com outros objetos
 06 Oct - Resolvendo o problema no mapeamento e otimizando as API's para um padrao REST
 07 Oct - Integração com AWS S3 para armazenamento de imagens, pegando url da imagem do bucket e salvando no banco
+09 Oct - Excluindo imagem da s3 e do banco, melhorando arquitetura de estoque e produtos, testando api de estoque
+09 Oct - Criando Api de pedido 

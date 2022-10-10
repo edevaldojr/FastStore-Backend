@@ -4,7 +4,6 @@ import java.util.Calendar;
 import java.util.List;
 
 import javax.persistence.CascadeType;
-import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -23,9 +22,11 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 
 import br.com.faststore.lopestyle.models.enums.OrderStatus;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
+@EqualsAndHashCode
 public class Order {
    
     @Id
@@ -57,5 +58,14 @@ public class Order {
     @UpdateTimestamp
     @Temporal(TemporalType.TIMESTAMP)
     private Calendar updatedAt;
+
+
+	public double getValorTotal() {
+        double soma = 0.0;
+        for (OrderProduct ip : orderProducts) {
+            soma = soma + ip.getSubTotal();
+        }
+        return soma;
+    }
 
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public enum PaymentStatus {
     PAID("Pago"),
+    PENDING("Pendente"),
     REFUSED("Recusado");
 
     @Getter

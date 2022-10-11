@@ -23,6 +23,7 @@ public class ImageController {
     @Autowired
     private ImageService imageService;
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/product/{productId}/image/upload")   
     public ResponseEntity<Void> uploadProductImage(@PathVariable("productId") int productId, @RequestParam(name = "file") MultipartFile file) {
         URI uri = imageService.uploadProductPicture(file, productId);

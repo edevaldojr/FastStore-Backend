@@ -3,8 +3,6 @@ package br.com.faststore.lopestyle.services;
 
 import br.com.faststore.lopestyle.security.UserSS;
 import br.com.faststore.lopestyle.services.Exceptions.UserEmailNotEnabledException;
-import br.com.faststore.lopestyle.models.Consumer;
-import br.com.faststore.lopestyle.models.Employee;
 import br.com.faststore.lopestyle.models.User;
 import br.com.faststore.lopestyle.repositories.UserRepository;
 
@@ -14,7 +12,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @Service

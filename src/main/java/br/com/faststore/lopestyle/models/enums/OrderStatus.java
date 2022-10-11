@@ -4,6 +4,7 @@ import lombok.Getter;
 
 public enum OrderStatus {
 
+    PENDING("Pedido Pendente"),
     PREPARING("Preparando Pedido"),
     POSTED("Pedido Enviado"),
     FINISHED("Pedido Finalizado");

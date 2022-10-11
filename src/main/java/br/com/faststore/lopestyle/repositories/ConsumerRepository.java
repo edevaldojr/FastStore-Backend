@@ -1,6 +1,8 @@
 package br.com.faststore.lopestyle.repositories;
 
 
+import java.util.Optional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +17,5 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     Page<Consumer> findByEnabledTrue(Pageable pageable);
 
-
+    Optional<Consumer> findByIdActiveTrue(int id);
 }

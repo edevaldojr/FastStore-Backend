@@ -1,11 +1,11 @@
 package br.com.faststore.lopestyle.controllers;
 
 import java.net.URI;
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -33,6 +33,7 @@ public class CategoryController {
         return ResponseEntity.ok(categories);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/category")
     public ResponseEntity<Category> insertCategory(@RequestBody Category category) {
         category = categoryService.insertCategory(category);
@@ -41,11 +42,13 @@ public class CategoryController {
         return ResponseEntity.created(uri).build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PutMapping("/category/{categoryId}")
     public ResponseEntity<Void> updateCategory(@PathVariable("categoryId") int categoryId,@RequestBody Category category) {
         return ResponseEntity.noContent().build();
     }
-
+    
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/category/{categoryId}")
     public ResponseEntity<Void> deleteCategory(@PathVariable("categoryId") int categoryId) {
         categoryService.deleteCategory(categoryId);

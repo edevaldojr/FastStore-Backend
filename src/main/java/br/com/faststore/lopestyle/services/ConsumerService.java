@@ -16,6 +16,8 @@ import br.com.faststore.lopestyle.models.Consumer;
 import br.com.faststore.lopestyle.models.User;
 import br.com.faststore.lopestyle.repositories.ConsumerRepository;
 import br.com.faststore.lopestyle.repositories.UserRepository;
+import br.com.faststore.lopestyle.security.UserSS;
+import br.com.faststore.lopestyle.services.Exceptions.AuthorizationException;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
 
 @Service
@@ -28,7 +30,7 @@ public class ConsumerService {
     private UserRepository userRepository;
 
     public Consumer getConsumer(int consumerId){
-        Consumer consumer = repository.findById(consumerId).orElseThrow(() -> new ObjectNotFoundException(
+        Consumer consumer = repository.findByIdActiveTrue(consumerId).orElseThrow(() -> new ObjectNotFoundException(
                                 "Objeto não encontrado! Id: " + consumerId + ", Tipo: " + Consumer.class.getName()));
         return consumer;
     }
@@ -61,9 +63,14 @@ public class ConsumerService {
     }
 
     public void deleteConsumer(int consumerId) {
-        Consumer Consumer = repository.findById(consumerId).orElseThrow(() -> new ObjectNotFoundException(
+        UserSS user = UserService.authenticated();
+        if (user == null) {
+            throw new AuthorizationException("Acesso negado");
+        }
+        Consumer consumer = repository.findById(consumerId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + consumerId + ", Tipo: " + Consumer.class.getName()));
-        repository.delete(Consumer);
+        consumer.setActive(false);
+        repository.save(consumer);
     }
 
     public Consumer updateFields(Consumer emp, Consumer newEmp){

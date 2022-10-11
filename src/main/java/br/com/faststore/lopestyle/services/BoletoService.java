@@ -1,7 +1,6 @@
 package br.com.faststore.lopestyle.services;
 
 import java.util.Calendar;
-import java.util.Date;
 
 import org.springframework.stereotype.Service;
 

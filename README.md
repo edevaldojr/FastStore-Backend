@@ -24,3 +24,5 @@ Emaildev: http://127.0.0.1:1080/
 07 Oct - Integração com AWS S3 para armazenamento de imagens, pegando url da imagem do bucket e salvando no banco
 09 Oct - Excluindo imagem da s3 e do banco, melhorando arquitetura de estoque e produtos, testando api de estoque
 09 Oct - Criando Api de pedido, pagamento por boleto e cartão, atualizando envio de email - falta testar
+11 Oct - Criando api para aprovar pagamento manualmente, gerenciando autorização das api's.
+11 Oct - Excluindo imports não utilizados,

@@ -1,6 +1,5 @@
 package br.com.faststore.lopestyle.services;
 
-import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,9 +45,10 @@ public class CaregoryService {
     }
 
     public void deleteCategory(int categoryId) {
-        Category cat = repository.findById(categoryId).orElseThrow(() -> new ObjectNotFoundException(
+        Category category = repository.findById(categoryId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + categoryId + ", Tipo: " + Category.class.getName()));
-        repository.delete(cat);
+        category.setActive(false);
+        repository.save(category);
     }
     
 

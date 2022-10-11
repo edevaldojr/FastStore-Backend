@@ -4,21 +4,26 @@ import java.util.Calendar;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
+import br.com.faststore.lopestyle.controllers.dto.FilterDto;
 import br.com.faststore.lopestyle.models.Consumer;
 import br.com.faststore.lopestyle.models.Order;
 import br.com.faststore.lopestyle.models.OrderProduct;
-import br.com.faststore.lopestyle.models.Payment;
 import br.com.faststore.lopestyle.models.PaymentWithBoleto;
 import br.com.faststore.lopestyle.models.Stock;
+import br.com.faststore.lopestyle.models.enums.OrderStatus;
 import br.com.faststore.lopestyle.models.enums.PaymentStatus;
 import br.com.faststore.lopestyle.registration.email.EmailService;
 import br.com.faststore.lopestyle.repositories.ConsumerRepository;
-import br.com.faststore.lopestyle.repositories.OrderProductRepository;
+import br.com.faststore.lopestyle.repositories.OrderProductStockRepository;
 import br.com.faststore.lopestyle.repositories.OrderRepository;
 import br.com.faststore.lopestyle.repositories.PaymentRepository;
 import br.com.faststore.lopestyle.repositories.StockRepository;
+import br.com.faststore.lopestyle.security.UserSS;
+import br.com.faststore.lopestyle.services.Exceptions.AuthorizationException;
 import br.com.faststore.lopestyle.services.Exceptions.InsufficientAmountException;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
 
@@ -35,7 +40,7 @@ public class OrderService {
     private PaymentRepository paymentRepository;
 
     @Autowired
-    private OrderProductRepository orderProductRepository;
+    private OrderProductStockRepository orderProductRepository;
 
     @Autowired 
     private StockRepository stockRepository;
@@ -54,12 +59,14 @@ public class OrderService {
         order.setCreatedAt(dateNow);
         order.setAddress(order.getAddress());
         order.setConsumer(consumer);
+        order.setStatus(OrderStatus.PENDING);
         order.getPayment().setStatus(PaymentStatus.PENDING);
         order.getPayment().setOrder(order);
         if (order.getPayment() instanceof PaymentWithBoleto) {
             PaymentWithBoleto pagto = (PaymentWithBoleto) order.getPayment();
             boletoService.preencherPagamentoComBoleto(pagto, order.getCreatedAt());
         }
+
         order = orderRepository.save(order);
         paymentRepository.save(order.getPayment());
 
@@ -86,4 +93,48 @@ public class OrderService {
         return order;
     }
     
+
+    public Order getOrderById(int orderId) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ObjectNotFoundException(
+            "Pedido não encontrado!, Id: " + orderId + "Tipo: " + Order.class.getName()));
+
+        return order;
+    }
+
+
+    public Page<Order> getConsumerOrders(int consumerId, FilterDto filterDto) {
+        UserSS user = UserService.authenticated();
+        if (user == null) {
+            throw new AuthorizationException("Acesso negado");
+        }
+        
+        PageRequest pageable = PageRequest.of(filterDto.getPage(), filterDto.getPageSize());
+        Consumer consumer = consumerRepository.findById(consumerId).orElseThrow(() -> new ObjectNotFoundException(
+            "Consumidor não encontrado!, Id: " + consumerId + "Tipo: " + Consumer.class.getName()));;
+
+        Page<Order> orders = orderRepository.findByConsumer(consumer, pageable);
+        
+        return orders;
+    }
+
+    public void acceptPaymentOrder(int orderId){
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ObjectNotFoundException(
+            "Pedido não encontrado!, Id: " + orderId + "Tipo: " + Order.class.getName()));
+
+        order.getPayment().setStatus(PaymentStatus.PAID);
+        order.setStatus(OrderStatus.PREPARING);
+
+        //send email order is preparing to be sent
+        orderRepository.save(order);
+    }
+
+    public void refusedPaymentOrder(int orderId){
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new ObjectNotFoundException(
+            "Pedido não encontrado!, Id: " + orderId + "Tipo: " + Order.class.getName()));
+
+        order.getPayment().setStatus(PaymentStatus.REFUSED);
+        
+        //send email order is preparing to be sent
+        orderRepository.save(order);
+    }
 }

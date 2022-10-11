@@ -16,7 +16,6 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import br.com.faststore.lopestyle.models.Order;
-import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Service

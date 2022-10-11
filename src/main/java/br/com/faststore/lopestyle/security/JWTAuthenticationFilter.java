@@ -12,7 +12,6 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import br.com.faststore.lopestyle.controllers.dto.CredentialsDTO;
-import br.com.faststore.lopestyle.services.Exceptions.UserEmailNotEnabledException;
 
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

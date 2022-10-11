@@ -12,15 +12,14 @@ import lombok.EqualsAndHashCode;
 @Data
 @Embeddable
 @EqualsAndHashCode
-public class OrderProductPK implements Serializable{
+public class OrderProductStockPK implements Serializable{
     
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;
     @ManyToOne
     @JoinColumn(name = "product_id")
-    private Product product;
-    
+    private Product product;   
     @ManyToOne
     @JoinColumn(name = "stock_id")
     private Stock stock;

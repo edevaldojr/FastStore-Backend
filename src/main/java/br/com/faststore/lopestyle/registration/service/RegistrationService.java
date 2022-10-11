@@ -5,7 +5,6 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -14,13 +13,11 @@ import br.com.faststore.lopestyle.models.Employee;
 import br.com.faststore.lopestyle.models.User;
 import br.com.faststore.lopestyle.models.enums.Perfil;
 import br.com.faststore.lopestyle.registration.email.EmailSender;
-import br.com.faststore.lopestyle.registration.email.EmailService;
 import br.com.faststore.lopestyle.registration.token.ConfirmationToken;
 import br.com.faststore.lopestyle.registration.token.ConfirmationTokenService;
 import br.com.faststore.lopestyle.repositories.ConsumerRepository;
 import br.com.faststore.lopestyle.repositories.EmployeeRepository;
 import br.com.faststore.lopestyle.repositories.UserRepository;
-import br.com.faststore.lopestyle.services.ConsumerService;
 import br.com.faststore.lopestyle.services.UserDetailsServiceImpl;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectAlreadyExistsException;
 

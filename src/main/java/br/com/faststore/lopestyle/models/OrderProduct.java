@@ -15,7 +15,7 @@ public class OrderProduct {
 
     @JsonIgnore
     @EmbeddedId
-    private OrderProductPK id = new OrderProductPK();
+    private OrderProductStockPK id = new OrderProductStockPK();
     private int quantity;
     private double discount;
     private double unityValue;
@@ -60,11 +60,11 @@ public class OrderProduct {
         id.setOrder(order);
     }
 
-    public OrderProductPK getId() {
+    public OrderProductStockPK getId() {
         return id;
     }
 
-    public void setId(OrderProductPK id) {
+    public void setId(OrderProductStockPK id) {
         this.id = id;
     }
 

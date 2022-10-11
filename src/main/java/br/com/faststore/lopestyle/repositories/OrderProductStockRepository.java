@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import br.com.faststore.lopestyle.models.OrderProduct;
 
 @Repository
-public interface OrderProductRepository extends JpaRepository<OrderProduct, Integer>{
+public interface OrderProductStockRepository extends JpaRepository<OrderProduct, Integer>{
     
 }

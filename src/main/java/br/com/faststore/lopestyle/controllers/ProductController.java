@@ -47,6 +47,7 @@ public class ProductController {
         return ResponseEntity.ok().body(products);
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @PostMapping("/product/{categoryId}")
     public ResponseEntity<Product> insertProduct(@PathVariable("categoryId") int categoryId, @RequestBody ProductDTO  productDTO) {
         Product product = productService.insertProduct(categoryId, productDTO);
@@ -62,6 +63,7 @@ public class ProductController {
         return ResponseEntity.noContent().build();
     }
 
+    @PreAuthorize("hasAnyRole('ADMIN')")
     @DeleteMapping("/product/{productId}")
     public ResponseEntity<Void> deleteProduct(@PathVariable("productId") int productId) {
         productService.deleteProduct(productId);

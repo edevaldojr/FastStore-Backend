@@ -17,5 +17,5 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
 
     Page<Consumer> findByEnabledTrue(Pageable pageable);
 
-    Optional<Consumer> findByIdActiveTrue(int id);
+    Optional<Consumer> findByIdAndActiveTrue(int consumerId);
 }

@@ -30,7 +30,7 @@ public class ConsumerService {
     private UserRepository userRepository;
 
     public Consumer getConsumer(int consumerId){
-        Consumer consumer = repository.findByIdActiveTrue(consumerId).orElseThrow(() -> new ObjectNotFoundException(
+        Consumer consumer = repository.findByIdAndActiveTrue(consumerId).orElseThrow(() -> new ObjectNotFoundException(
                                 "Objeto não encontrado! Id: " + consumerId + ", Tipo: " + Consumer.class.getName()));
         return consumer;
     }

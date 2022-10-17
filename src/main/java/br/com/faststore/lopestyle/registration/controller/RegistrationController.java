@@ -1,6 +1,7 @@
 package br.com.faststore.lopestyle.registration.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,6 +26,7 @@ public class RegistrationController {
         return ResponseEntity.ok().body(registrationService.register(consumer));
     }
 
+   
     @PostMapping("dashboard/registerEmployee")
     public ResponseEntity<String> register(@RequestBody Employee employee) {
         return ResponseEntity.ok().body(registrationService.registerEmployee(employee));

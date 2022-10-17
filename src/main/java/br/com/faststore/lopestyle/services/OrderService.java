@@ -1,7 +1,9 @@
 package br.com.faststore.lopestyle.services;
 
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -9,6 +11,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import br.com.faststore.lopestyle.controllers.dto.FilterDto;
+import br.com.faststore.lopestyle.models.Address;
 import br.com.faststore.lopestyle.models.Consumer;
 import br.com.faststore.lopestyle.models.Order;
 import br.com.faststore.lopestyle.models.OrderProduct;
@@ -17,6 +20,7 @@ import br.com.faststore.lopestyle.models.Stock;
 import br.com.faststore.lopestyle.models.enums.OrderStatus;
 import br.com.faststore.lopestyle.models.enums.PaymentStatus;
 import br.com.faststore.lopestyle.registration.email.EmailService;
+import br.com.faststore.lopestyle.repositories.AddressRepository;
 import br.com.faststore.lopestyle.repositories.ConsumerRepository;
 import br.com.faststore.lopestyle.repositories.OrderProductStockRepository;
 import br.com.faststore.lopestyle.repositories.OrderRepository;
@@ -45,19 +49,29 @@ public class OrderService {
     @Autowired 
     private StockRepository stockRepository;
 
+    @Autowired 
+    private AddressRepository addressRepository;
+
     @Autowired
     private BoletoService boletoService;
 
     @Autowired
     private EmailService emailService;
 
+    public Page<Order> getOrders(FilterDto filterDto){
+        PageRequest pageable = PageRequest.of(filterDto.getPage(), filterDto.getPageSize());
+        return orderRepository.findAll(pageable);
+    }
+
     public Order insert(Order order) {
         Calendar dateNow = Calendar.getInstance();
         Consumer consumer = consumerRepository.findById(order.getConsumer().getId()).orElseThrow(() -> new ObjectNotFoundException(
             "Consumidor não encontrado!, Tipo: " + Consumer.class.getName()));
+        
+        Address address = addressRepository.save(order.getAddress());
 
         order.setCreatedAt(dateNow);
-        order.setAddress(order.getAddress());
+        order.setAddress(address);
         order.setConsumer(consumer);
         order.setStatus(OrderStatus.PENDING);
         order.getPayment().setStatus(PaymentStatus.PENDING);
@@ -66,9 +80,16 @@ public class OrderService {
             PaymentWithBoleto pagto = (PaymentWithBoleto) order.getPayment();
             boletoService.preencherPagamentoComBoleto(pagto, order.getCreatedAt());
         }
-
+        Set<OrderProduct> orderProducts = order.getOrderProducts();
+        order.setOrderProducts(new HashSet<>());
         order = orderRepository.save(order);
+
         paymentRepository.save(order.getPayment());
+        for (OrderProduct orderProduct : orderProducts) {
+            orderProduct.getId().setOrder(order);
+        }
+
+        order.setOrderProducts(orderProducts);
 
         List<Stock> stocks = stockRepository.findAll();
 
@@ -89,7 +110,7 @@ public class OrderService {
             orderProduct.setOrder(order);
         }
         orderProductRepository.saveAll(order.getOrderProducts());
-        emailService.sendOrderConfirmationHtmlEmail(order);
+        //emailService.sendOrderConfirmationHtmlEmail(order);
         return order;
     }
     

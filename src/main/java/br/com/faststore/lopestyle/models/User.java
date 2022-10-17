@@ -46,7 +46,6 @@ public class User {
     @CollectionTable(name = "PERFIS")
     private Set<Integer> perfis = new HashSet<>();
 
-    private Boolean locked = false;
     private Boolean enabled = false;
     private boolean active;
 

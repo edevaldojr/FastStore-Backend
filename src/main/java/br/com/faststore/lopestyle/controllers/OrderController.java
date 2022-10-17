@@ -25,6 +25,11 @@ public class OrderController {
     @Autowired
     private OrderService orderService;
 
+    @GetMapping("/")
+    public ResponseEntity<Page<Order>> getOrders(@RequestBody FilterDto filterDto) {
+        return ResponseEntity.ok().body(orderService.getOrders(filterDto));
+    }
+
     @GetMapping("/order/{orderId}")
     public ResponseEntity<Order> getOrder(@PathVariable("orderId") int orderId) {
         return ResponseEntity.ok().body(orderService.getOrderById(orderId));

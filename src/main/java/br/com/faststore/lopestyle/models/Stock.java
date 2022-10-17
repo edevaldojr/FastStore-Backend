@@ -3,6 +3,7 @@ package br.com.faststore.lopestyle.models;
 import java.util.HashSet;
 import java.util.Set;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -16,7 +17,7 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude="orderProducts")
 public class Stock {
     
     @Id
@@ -28,6 +29,6 @@ public class Stock {
     private Double unityValue;
 
     @JsonIgnore
-    @OneToMany(mappedBy = "id.stock")
+    @OneToMany(mappedBy = "id.stock", cascade=CascadeType.PERSIST)
     private Set<OrderProduct> orderProducts = new HashSet<>();
 }

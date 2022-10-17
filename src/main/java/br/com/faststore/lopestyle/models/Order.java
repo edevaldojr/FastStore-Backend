@@ -1,7 +1,9 @@
 package br.com.faststore.lopestyle.models;
 
+import java.io.Serializable;
 import java.util.Calendar;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -26,8 +28,8 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @Entity
-@EqualsAndHashCode
-public class Order {
+@EqualsAndHashCode(exclude="orderProducts")
+public class Order implements Serializable{
    
     @Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,9 +47,9 @@ public class Order {
 	@OneToOne(cascade = CascadeType.ALL, mappedBy = "order")
 	private Payment payment;
 
-	@OneToMany
+	@OneToMany(cascade=CascadeType.PERSIST)
 	@JoinColumn(name = "id.order")
-    private List<OrderProduct> orderProducts;
+    private Set<OrderProduct> orderProducts= new HashSet<>();
 	
 	@JsonFormat(pattern = "dd/MM/yyyy HH:mm")
 	@CreationTimestamp
@@ -60,7 +62,7 @@ public class Order {
     private Calendar updatedAt;
 
 
-	public double getValorTotal() {
+	public double getTotalValue() {
         double soma = 0.0;
         for (OrderProduct ip : orderProducts) {
             soma = soma + ip.getSubTotal();

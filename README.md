@@ -25,4 +25,5 @@ Emaildev: http://127.0.0.1:1080/
 09 Oct - Excluindo imagem da s3 e do banco, melhorando arquitetura de estoque e produtos, testando api de estoque
 09 Oct - Criando Api de pedido, pagamento por boleto e cartão, atualizando envio de email - falta testar
 11 Oct - Criando api para aprovar pagamento manualmente, gerenciando autorização das api's.
-11 Oct - Excluindo imports não utilizados,
+11 Oct - Excluindo imports não utilizados.
+16 Oct - Arrumando e testando API de pedido

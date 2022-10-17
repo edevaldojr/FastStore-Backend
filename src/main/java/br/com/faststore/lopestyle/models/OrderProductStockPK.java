@@ -12,7 +12,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @Embeddable
 @EqualsAndHashCode
-public class OrderProductStockPK implements Serializable{
+public class OrderProductStockPK implements Serializable {
     
     @ManyToOne
     @JoinColumn(name = "order_id")

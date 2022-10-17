@@ -5,23 +5,28 @@ import javax.persistence.Entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
 @EqualsAndHashCode
+@AllArgsConstructor
+@NoArgsConstructor
 public class OrderProduct {
 
     @JsonIgnore
     @EmbeddedId
     private OrderProductStockPK id = new OrderProductStockPK();
+    
     private int quantity;
     private double discount;
     private double unityValue;
 
 
-    public OrderProduct(Order order, Stock stock, Product product, Double discount, int quantity, Double unityValue) {
+    public OrderProduct(Order order, Product product, Stock stock, Double discount, int quantity, Double unityValue) {
         id.setOrder(order);
         id.setProduct(product);
         id.setStock(stock);
@@ -50,6 +55,7 @@ public class OrderProduct {
     public void setProduct(Product product) {
         id.setProduct(product);
     }
+
 
     @JsonIgnore
     public Order getOrder() {

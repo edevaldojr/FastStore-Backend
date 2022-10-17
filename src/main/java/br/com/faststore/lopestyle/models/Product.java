@@ -50,12 +50,8 @@ public class Product {
     @OneToMany(cascade=CascadeType.ALL)
     private List<Stock> stock;
 
-    @OneToMany( cascade=CascadeType.ALL)
+    @OneToMany(cascade=CascadeType.ALL)
     private List<Image> images;
-
-    @JsonIgnore
-    @OneToMany(mappedBy = "id.product")
-    private Set<OrderProduct> orderProducts = new HashSet<>();
 
     private boolean active;
 

@@ -35,13 +35,13 @@ public class ProductController {
         return ResponseEntity.ok().body(productService.getProduct(productId));
     }
 
-    @GetMapping("/all")
+    @PostMapping("/all")
     public ResponseEntity<Page<Product>> getProducts(@RequestBody FilterDto productsFilterDto) {
         Page<Product> products = productService.getProductsPageable(productsFilterDto);
         return ResponseEntity.ok().body(products);
     }
 
-    @GetMapping("/search")
+    @PostMapping("/search")
     public ResponseEntity<List<Product>> searchProducts(@RequestBody FilterDto productsFilterDto) {
         List<Product> products = productService.getBySearch(productsFilterDto);
         return ResponseEntity.ok().body(products);

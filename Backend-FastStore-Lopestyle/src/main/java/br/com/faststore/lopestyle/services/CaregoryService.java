@@ -1,5 +1,6 @@
 package br.com.faststore.lopestyle.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,9 +20,8 @@ public class CaregoryService {
     @Autowired
     private CategoryRepository repository;
 
-    public Page<Category> getAllCategories(FilterDto categorysFilterDto) {
-        PageRequest pageable = PageRequest.of(categorysFilterDto.getPage(), categorysFilterDto.getPageSize());
-        Page<Category> categorys = repository.findAll(pageable);
+    public List<Category> getAllCategories() {
+        List<Category> categorys = repository.findAll();
         return categorys;
     }
 

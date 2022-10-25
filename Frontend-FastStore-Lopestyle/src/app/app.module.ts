@@ -1,6 +1,7 @@
+import { CategoryService } from './../shared/services/category.service';
 import { ProductService } from './../shared/services/product.service';
 import { routing } from './app.routing';
-import { NgModule } from '@angular/core';
+import { LOCALE_ID, NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 
 import { AppComponent } from './app.component';
@@ -21,6 +22,10 @@ import { SignupComponent } from '../public/pages/signup/signup.component';
 import {MatFormFieldModule} from '@angular/material/form-field';
 import {MatCardModule} from '@angular/material/card';
 import { HttpClientModule } from '@angular/common/http';
+import { registerLocaleData } from '@angular/common';
+import localePt from '@angular/common/locales/pt';
+
+registerLocaleData(localePt);
 
 @NgModule({
   declarations: [
@@ -48,7 +53,12 @@ import { HttpClientModule } from '@angular/common/http';
     HttpClientModule
   ],
   providers: [
-    ProductService
+    ProductService,
+    CategoryService,
+    {
+      provide: LOCALE_ID,
+      useValue: "pt-BR"
+    }
   ],
   bootstrap: [AppComponent]
 })

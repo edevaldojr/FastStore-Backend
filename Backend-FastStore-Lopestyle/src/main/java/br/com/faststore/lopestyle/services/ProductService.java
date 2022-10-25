@@ -85,6 +85,9 @@ public class ProductService {
                         .description(productDTO.getProduct().getDescription())
                         .createdAt(prod.getCreatedAt())
                         .updatedAt(dateNow)
+                        .images(prod.getImages())
+                        .stock(prod.getStock())
+                        .active(productDTO.getProduct().isActive())
                         .build();
                         
         return productRepository.save(prod);

@@ -41,6 +41,12 @@ public class ProductController {
         return ResponseEntity.ok().body(products);
     }
 
+    @PostMapping("/{categoryId}")
+    public ResponseEntity<Page<Product>> getProductsByCategory(@PathVariable("categoryId") int categoryId, @RequestBody FilterDto productsFilterDto) {
+        Page<Product> products = productService.getProductsByCategoryPageable(productsFilterDto, categoryId);
+        return ResponseEntity.ok().body(products);
+    }
+
     @PostMapping("/search")
     public ResponseEntity<List<Product>> searchProducts(@RequestBody FilterDto productsFilterDto) {
         List<Product> products = productService.getBySearch(productsFilterDto);

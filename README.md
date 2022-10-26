@@ -27,3 +27,4 @@ Emaildev: http://127.0.0.1:1080/
 11 Oct - Criando api para aprovar pagamento manualmente, gerenciando autorização das api's.
 11 Oct - Excluindo imports não utilizados.
 16 Oct - Arrumando e testando API de pedido
+26 Oct - Criando API que busca produtos por categoria

@@ -53,6 +53,12 @@ public class ProductService {
         return products;
     }
 
+    public Page<Product> getProductsByCategoryPageable(FilterDto productsFilterDto, int categoryId) {
+        PageRequest pageable = PageRequest.of(productsFilterDto.getPage(), productsFilterDto.getPageSize());
+        Page<Product> products = productRepository.findAllByCategoryIdAndActiveTrue(categoryId, pageable);
+        return products;
+    }
+
     public List<Product> getBySearch(FilterDto productsFilterDto) {
         List<Product> products = productRepository.findByActiveTrueAndNameContaining(productsFilterDto.getSearch());
         return products;

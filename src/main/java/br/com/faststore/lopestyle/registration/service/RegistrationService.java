@@ -5,6 +5,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -48,6 +49,9 @@ public class RegistrationService {
     @Autowired
     private EmailSender emailSender;
 
+    @Value("${default.server}")
+    private String server;
+
     
     public String register(Consumer consumer) {
         consumer.addPerfil(Perfil.CONSUMER);
@@ -65,6 +69,11 @@ public class RegistrationService {
             throw new ObjectAlreadyExistsException("Email já cadastrado.");
         }
 
+        Optional<Consumer> cpfExists = consumerRepository.findByCpf(consumer.getCpf());
+        if(cpfExists.isPresent()){
+            throw new ObjectAlreadyExistsException("Cpf já cadastrado.");
+        }
+
         consumerRepository.save(consumer);
 
         String token = UUID.randomUUID().toString();
@@ -73,7 +82,7 @@ public class RegistrationService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        String link = this.server + "/api/v1/registration/confirm?token=" + token;
         
         emailSender.send(
             consumer.getEmail(),

@@ -15,6 +15,8 @@ public interface ConsumerRepository extends JpaRepository<Consumer, Integer> {
     
     Consumer findByEmail(String email);
 
+    Optional<Consumer> findByCpf(String cpf);
+
     Page<Consumer> findByEnabledTrue(Pageable pageable);
 
     Optional<Consumer> findByIdAndActiveTrue(int consumerId);

@@ -35,7 +35,7 @@ public class OrderController {
         return ResponseEntity.ok().body(orderService.getOrderById(orderId));
     }
 
-    @GetMapping("/order/{consumerId}")
+    @PostMapping("/order/{consumerId}")
     public ResponseEntity<Page<Order>> getOrdersConsumer(@PathVariable("consumerId") int consumerId, @RequestBody FilterDto filterDto) {
         return ResponseEntity.ok().body(orderService.getConsumerOrders(consumerId, filterDto));
     }

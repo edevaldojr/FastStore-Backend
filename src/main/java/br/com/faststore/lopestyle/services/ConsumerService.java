@@ -29,6 +29,14 @@ public class ConsumerService {
     @Autowired(required = false)
     private UserRepository userRepository;
 
+    public Consumer getConsumerByEmail(String email){
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException(
+                                "Usuário não encontrado! Email: " + email + ", Tipo: " + User.class.getName()));
+        Consumer consumer = repository.findById(user.getId()).orElseThrow(() -> new ObjectNotFoundException(
+            "Consumidor não encontrado! Email: " + email + ", Tipo: " + Consumer.class.getName()));
+        return consumer;
+    }
+
     public Consumer getConsumer(int consumerId){
         Consumer consumer = repository.findByIdAndActiveTrue(consumerId).orElseThrow(() -> new ObjectNotFoundException(
                                 "Objeto não encontrado! Id: " + consumerId + ", Tipo: " + Consumer.class.getName()));
@@ -69,8 +77,9 @@ public class ConsumerService {
         }
         Consumer consumer = repository.findById(consumerId).orElseThrow(() -> new ObjectNotFoundException(
             "Objeto não encontrado! Id: " + consumerId + ", Tipo: " + Consumer.class.getName()));
-        consumer.setActive(false);
-        repository.save(consumer);
+        // consumer.setActive(false);
+        // repository.save(consumer);
+        repository.delete(consumer);
     }
 
     public Consumer updateFields(Consumer emp, Consumer newEmp){

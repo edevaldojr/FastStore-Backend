@@ -1,9 +1,9 @@
 package br.com.faststore.lopestyle.models.enums;
 
 public enum SexType {
-    MALE(1,"Masculino"),
-    FEMALE(2,"Feminino"),
-    OTHER(3, "Outro");
+    MALE(0,"Masculino"),
+    FEMALE(1,"Feminino"),
+    OTHER(2, "Outro");
 
     private int code;
     private String description;

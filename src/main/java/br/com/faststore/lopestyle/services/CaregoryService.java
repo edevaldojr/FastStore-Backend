@@ -4,11 +4,8 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
-import br.com.faststore.lopestyle.controllers.dto.FilterDto;
 import br.com.faststore.lopestyle.models.Category;
 import br.com.faststore.lopestyle.repositories.CategoryRepository;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectAlreadyExistsException;

@@ -5,6 +5,7 @@ import javax.mail.internet.MimeMessage;
 import org.springframework.mail.SimpleMailMessage;
 
 import br.com.faststore.lopestyle.models.Order;
+import br.com.faststore.lopestyle.models.User;
 
 public interface EmailSender {
     
@@ -18,4 +19,5 @@ public interface EmailSender {
 
     void sendOrderConfirmationEmail(Order order);
 
+    void sendNewPasswordEmail(User user, String newPass);
 }

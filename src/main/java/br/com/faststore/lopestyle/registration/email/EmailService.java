@@ -16,6 +16,7 @@ import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
 
 import br.com.faststore.lopestyle.models.Order;
+import br.com.faststore.lopestyle.models.User;
 import lombok.extern.log4j.Log4j2;
 
 @Service
@@ -105,6 +106,22 @@ public class EmailService implements EmailSender{
         log.info("Simulando envio de email...");
         log.info(msg.toString());
         log.info("Email enviado");
+    }
+
+    @Override
+    public void sendNewPasswordEmail(User user, String newPass) {
+        SimpleMailMessage sm = prepareNewPasswordEmail(user, newPass);
+        sendEmail(sm);
+    }
+
+    protected SimpleMailMessage prepareNewPasswordEmail(User cliente, String newPass) {
+        SimpleMailMessage sm = new SimpleMailMessage();
+        sm.setTo(cliente.getEmail());
+        sm.setFrom(sender);
+        sm.setSubject("Solicitação de nova senha");
+        sm.setSentDate(new Date(System.currentTimeMillis()));
+        sm.setText("Nova senha: " + newPass);
+        return sm;
     }
 
 

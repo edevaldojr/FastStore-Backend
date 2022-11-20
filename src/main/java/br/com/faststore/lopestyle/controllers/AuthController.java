@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.faststore.lopestyle.controllers.dto.CredentialsDTO;
 import br.com.faststore.lopestyle.controllers.dto.EmailDTO;
 import br.com.faststore.lopestyle.security.JWTUtil;
 import br.com.faststore.lopestyle.security.UserSS;
@@ -40,5 +41,11 @@ public class AuthController {
     public ResponseEntity<Void> forgot(@Valid @RequestBody EmailDTO objDto) {
         service.sendNewPassword(objDto.getEmail());
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/changePassword")
+    public ResponseEntity<Void> forgot(@RequestBody CredentialsDTO objDto) {
+        service.changePassword(objDto.getEmail(), objDto.getPassword());
+        return ResponseEntity.ok().build();
     }
 }

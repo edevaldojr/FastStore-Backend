@@ -2,6 +2,8 @@ package br.com.faststore.lopestyle.services;
 
 import java.util.Random;
 
+import javax.mail.MessagingException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -9,6 +11,8 @@ import org.springframework.stereotype.Service;
 import br.com.faststore.lopestyle.models.User;
 import br.com.faststore.lopestyle.registration.email.EmailService;
 import br.com.faststore.lopestyle.repositories.UserRepository;
+import br.com.faststore.lopestyle.security.UserSS;
+import br.com.faststore.lopestyle.services.Exceptions.AuthorizationException;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
 
 @Service
@@ -54,4 +58,18 @@ public class AuthService {
             return (char) (rand.nextInt(26) + 97);
         }
     }
+
+
+    public void changePassword(String email, String newPassword) {
+        UserSS userSS = UserService.authenticated();
+        if (userSS == null || !email.equals(userSS.getUsername())) {
+            throw new AuthorizationException("Acesso negado");
+        }
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new ObjectNotFoundException("Email não encontrado"));
+
+        user.setPassword(pe.encode(newPassword));
+
+        userRepository.save(user);
+    }
+
 }

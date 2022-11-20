@@ -38,6 +38,10 @@
     "name": "default.recipient",
     "type": "java.lang.String",
     "description": "A description for 'default.recipient'"
+  },
+  {
+    "name": "shipping.cep.origin",
+    "type": "java.lang.String",
+    "description": "A description for 'shipping.cep.origin'"
   }
 ]}
-  

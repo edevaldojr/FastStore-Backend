@@ -35,7 +35,7 @@ public class EmailService implements EmailSender{
     @Override
     public void sendOrderConfirmationEmail(Order obj) {
         SimpleMailMessage sm = prepareSimpleMailMessageFromOrder(obj);
-        sendEmail(sm);
+        javaMailSender.send(sm);
     }
 
     protected SimpleMailMessage prepareSimpleMailMessageFromOrder(Order obj) {
@@ -50,14 +50,14 @@ public class EmailService implements EmailSender{
 
     @Override
     @Async
-    public void send(String to, String email) {
+    public void send(String to, String email, String subject) {
         try {
             MimeMessage mimeMessage = javaMailSender.createMimeMessage();
             MimeMessageHelper helper =
                     new MimeMessageHelper(mimeMessage, "utf-8");
             helper.setText(email, true);
             helper.setTo(to);
-            helper.setSubject("Confirme seu email");
+            helper.setSubject(subject);
             helper.setFrom(sender);
             javaMailSender.send(mimeMessage);
         } catch (MessagingException exception) {
@@ -70,7 +70,7 @@ public class EmailService implements EmailSender{
     public void sendOrderConfirmationHtmlEmail(Order obj) {
         try {
             MimeMessage mm = prepareMimeMessageFromPedido(obj);
-            sendHtmlEmail(mm);
+            javaMailSender.send(mm);
         } catch (Exception e) {
             sendOrderConfirmationEmail(obj);
         }
@@ -94,35 +94,33 @@ public class EmailService implements EmailSender{
         return templateEngine.process("email/confirmacaoPedido", context);
     }
 
-    @Override
-    public void sendHtmlEmail(MimeMessage msg) {
-        log.info("Simulando envio de email HTML...");
-        log.info(msg.toString());
-        log.info("Email enviado");
-    }
-
-    @Override
-    public void sendEmail(SimpleMailMessage msg) {
-        log.info("Simulando envio de email...");
-        log.info(msg.toString());
-        log.info("Email enviado");
+    protected String htmlFromTemplateNewPassword(User user, String newPass) {
+        Context context = new Context();
+        context.setVariable("usuario", user);
+        context.setVariable("novaSenha", newPass);
+        return templateEngine.process("email/newPassword", context);
     }
 
     @Override
     public void sendNewPasswordEmail(User user, String newPass) {
-        SimpleMailMessage sm = prepareNewPasswordEmail(user, newPass);
-        sendEmail(sm);
+        try {
+            MimeMessage mm = prepareNewPasswordEmail(user, newPass);
+            javaMailSender.send(mm);
+        } catch (MessagingException e) {
+            log.info(e);
+        }
+       
     }
 
-    protected SimpleMailMessage prepareNewPasswordEmail(User cliente, String newPass) {
-        SimpleMailMessage sm = new SimpleMailMessage();
-        sm.setTo(cliente.getEmail());
-        sm.setFrom(sender);
-        sm.setSubject("Solicitação de nova senha");
-        sm.setSentDate(new Date(System.currentTimeMillis()));
-        sm.setText("Nova senha: " + newPass);
-        return sm;
+    protected MimeMessage prepareNewPasswordEmail(User user, String newPass) throws MessagingException {
+        MimeMessage mimeMessage = javaMailSender.createMimeMessage();
+        MimeMessageHelper mmh = new MimeMessageHelper(mimeMessage, true);
+        mmh.setTo(user.getEmail());
+        mmh.setFrom(sender);
+        mmh.setSubject("Solicitação de nova senha");
+        mmh.setSentDate(new Date(System.currentTimeMillis()));
+        mmh.setText(htmlFromTemplateNewPassword(user, newPass), true);
+        return mimeMessage;
     }
-
 
 }

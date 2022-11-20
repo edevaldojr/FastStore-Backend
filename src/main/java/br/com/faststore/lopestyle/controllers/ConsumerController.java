@@ -40,14 +40,14 @@ public class ConsumerController {
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/all")
-    public ResponseEntity<Page<Consumer>> getconsumers(@RequestBody FilterDto consumersFilterDto) {
+    public ResponseEntity<Page<Consumer>> getConsumers(@RequestBody FilterDto consumersFilterDto) {
         Page<Consumer> consumers = consumerService.getConsumersPageable(consumersFilterDto);
         return ResponseEntity.ok().body(consumers);
     }
 
     @PreAuthorize("hasAnyRole('ADMIN')")
     @GetMapping("/search")
-    public ResponseEntity<List<Consumer>> searchconsumers(@RequestBody FilterDto consumersFilterDto) {
+    public ResponseEntity<List<Consumer>> searchConsumers(@RequestBody FilterDto consumersFilterDto) {
         List<Consumer> consumers = consumerService.getBySearch(consumersFilterDto);
         return ResponseEntity.ok().body(consumers);
     }

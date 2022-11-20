@@ -30,3 +30,5 @@ Emaildev: http://127.0.0.1:1080/
 26 Oct - Criando API que busca produtos por categoria<br />
 08 Nov - Criando AuthService, e esqueci senha<br />
 08 Nov - Criando exception handler para capturar exeções<br />
+15 Nov - Criando endpoint para alteração de senha<br />
+17 Nov - Integrando com sistema do correio para busca de Preço e prazo de uma entrega<br />

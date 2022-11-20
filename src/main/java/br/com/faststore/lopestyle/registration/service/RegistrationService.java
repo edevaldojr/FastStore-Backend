@@ -86,7 +86,7 @@ public class RegistrationService {
         
         emailSender.send(
             consumer.getEmail(),
-            buildEmail(consumer.getFirstName(), link));
+            buildEmail(consumer.getFirstName(), link), "Confirme seu email");
 
         return token;
     }
@@ -121,7 +121,7 @@ public class RegistrationService {
         
         emailSender.send(
             employee.getEmail(),
-            buildEmail(employee.getFirstName(), link));
+            buildEmail(employee.getFirstName(), link), "Confirme seu email");
 
         return token;
     }

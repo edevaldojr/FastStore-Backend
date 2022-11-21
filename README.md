@@ -32,3 +32,4 @@ Emaildev: http://127.0.0.1:1080/
 08 Nov - Criando exception handler para capturar exeções<br />
 15 Nov - Criando endpoint para alteração de senha<br />
 17 Nov - Integrando com sistema do correio para busca de Preço e prazo de uma entrega<br />
+19 Nov - Adicionando url de imagem para categoria <br />

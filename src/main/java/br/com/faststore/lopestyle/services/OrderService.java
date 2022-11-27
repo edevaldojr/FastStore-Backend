@@ -30,7 +30,9 @@ import br.com.faststore.lopestyle.security.UserSS;
 import br.com.faststore.lopestyle.services.Exceptions.AuthorizationException;
 import br.com.faststore.lopestyle.services.Exceptions.InsufficientAmountException;
 import br.com.faststore.lopestyle.services.Exceptions.ObjectNotFoundException;
+import lombok.extern.log4j.Log4j2;
 
+@Log4j2
 @Service
 public class OrderService {
 
@@ -110,7 +112,7 @@ public class OrderService {
             orderProduct.setOrder(order);
         }
         orderProductRepository.saveAll(order.getOrderProducts());
-        //emailService.sendOrderConfirmationHtmlEmail(order);
+        emailService.sendOrderConfirmationHtmlEmail(order);
         return order;
     }
     
@@ -133,7 +135,7 @@ public class OrderService {
         Consumer consumer = consumerRepository.findById(consumerId).orElseThrow(() -> new ObjectNotFoundException(
             "Consumidor não encontrado!, Id: " + consumerId + "Tipo: " + Consumer.class.getName()));;
 
-        Page<Order> orders = orderRepository.findByConsumer(consumer, pageable);
+        Page<Order> orders = orderRepository.findByConsumerId(consumerId, pageable);
         
         return orders;
     }

@@ -6,14 +6,19 @@ import javax.persistence.Embeddable;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.ToString;
 
 @Data
 @Embeddable
-@EqualsAndHashCode
+@EqualsAndHashCode(exclude="order")
+@ToString(exclude="order")
 public class OrderProductStockPK implements Serializable {
     
+    @JsonIgnore
     @ManyToOne
     @JoinColumn(name = "order_id")
     private Order order;

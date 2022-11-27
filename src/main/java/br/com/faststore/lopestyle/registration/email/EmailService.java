@@ -90,7 +90,7 @@ public class EmailService implements EmailSender{
 
     protected String htmlFromTemplatePedido(Order obj) {
         Context context = new Context();
-        context.setVariable("pedido", obj);
+        context.setVariable("order", obj);
         return templateEngine.process("email/confirmacaoPedido", context);
     }
 

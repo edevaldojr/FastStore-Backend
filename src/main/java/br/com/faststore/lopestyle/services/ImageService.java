@@ -93,7 +93,7 @@ public class ImageService {
 
     public BufferedImage getJpgImageFromFile(MultipartFile uploadedFile) {
         String ext = FilenameUtils.getExtension(uploadedFile.getOriginalFilename());
-        if (!"png".equals(ext) && !"jpg".equals(ext)) {
+        if (!"png".equals(ext.toLowerCase()) && !"jpg".equals(ext.toLowerCase())) {
             throw new FileException("Somente imagens PNG e JPG são permitidas");
         }
 

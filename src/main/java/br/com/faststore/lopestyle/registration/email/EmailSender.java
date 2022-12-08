@@ -1,9 +1,6 @@
 package br.com.faststore.lopestyle.registration.email;
 
 import javax.mail.MessagingException;
-import javax.mail.internet.MimeMessage;
-
-import org.springframework.mail.SimpleMailMessage;
 
 import br.com.faststore.lopestyle.models.Order;
 import br.com.faststore.lopestyle.models.User;

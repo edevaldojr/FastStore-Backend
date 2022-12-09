@@ -117,7 +117,7 @@ public class RegistrationService {
 
         confirmationTokenService.saveConfirmationToken(confirmationToken);
 
-        String link = "http://localhost:8080/api/v1/registration/confirm?token=" + token;
+        String link = this.server + "/api/v1/registration/confirm?token=" + token;
         
         emailSender.send(
             employee.getEmail(),

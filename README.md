@@ -1,4 +1,17 @@
-# FastStore-Lopestyle
+
+# FastStore - Ecommerce
+
+Api's RESTFUL de um ecommerce para loja de roupas online.
+
+
+## Documentação
+
+[Documentação]
+Arquitetura: 
+<img src="https://github.com/edevaldojr/FastStore-Backend/blob/main/docs/Cliente-Servidor.png">
+Diagrama do banco de dados relacional: 
+<img src="https://github.com/edevaldojr/FastStore-Backend/blob/main/docs/Diagrama%20Relacional%20(ER)%20final.png">
+## Tecnologias
 Repositório TCC - Ecommerce
 
 ----------Historico de desenvolvimento----------

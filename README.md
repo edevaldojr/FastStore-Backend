@@ -1,5 +1,5 @@
 # FastStore-Lopestyle
-Repositório TCC
+Repositório TCC - Ecommerce
 
 ----------Historico de desenvolvimento----------
 
